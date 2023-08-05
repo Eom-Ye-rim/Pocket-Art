@@ -1,6 +1,7 @@
 package com.pocekt.art.repository;
 
-import capstonServer.capstonServer.entity.Photo;
+
+import com.pocekt.art.entity.Photo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

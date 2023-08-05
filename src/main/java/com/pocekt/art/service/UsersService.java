@@ -1,14 +1,15 @@
 package com.pocekt.art.service;
 
-import capstonServer.capstonServer.dto.request.UserRequestDto;
-import capstonServer.capstonServer.dto.response.Response;
-import capstonServer.capstonServer.dto.response.UserResponseDto;
-import capstonServer.capstonServer.entity.AuthProvider;
-import capstonServer.capstonServer.entity.Users;
-import capstonServer.capstonServer.enums.Authority;
-import capstonServer.capstonServer.jwt.JwtTokenProvider;
-import capstonServer.capstonServer.repository.UsersRepository;
-import capstonServer.capstonServer.security.SecurityUtil;
+
+import com.pocekt.art.dto.request.UserRequestDto;
+import com.pocekt.art.dto.response.Response;
+import com.pocekt.art.dto.response.UserResponseDto;
+import com.pocekt.art.entity.AuthProvider;
+import com.pocekt.art.entity.Users;
+import com.pocekt.art.enums.Authority;
+import com.pocekt.art.jwt.JwtTokenProvider;
+import com.pocekt.art.repository.UsersRepository;
+import com.pocekt.art.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;

@@ -1,7 +1,8 @@
 package com.pocekt.art.jwt;
 
-import capstonServer.capstonServer.security.SecurityUtil;
-import capstonServer.capstonServer.service.CustomUserDetailsService;
+
+import com.pocekt.art.security.SecurityUtil;
+import com.pocekt.art.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;

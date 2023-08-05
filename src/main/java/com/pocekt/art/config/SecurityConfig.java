@@ -1,12 +1,14 @@
 package com.pocekt.art.config;
 
 
-import capstonServer.capstonServer.jwt.JwtAuthenticationFilter;
-import capstonServer.capstonServer.jwt.JwtSecurityConfig;
-import capstonServer.capstonServer.jwt.JwtTokenProvider;
-import capstonServer.capstonServer.security.handler.CustomAccessDeniedHandler;
-import capstonServer.capstonServer.security.handler.CustomAuthenticationEntryPoint;
-import capstonServer.capstonServer.service.CustomUserDetailsService;
+
+
+import com.pocekt.art.jwt.JwtAuthenticationFilter;
+import com.pocekt.art.jwt.JwtSecurityConfig;
+import com.pocekt.art.jwt.JwtTokenProvider;
+import com.pocekt.art.security.handler.CustomAccessDeniedHandler;
+import com.pocekt.art.security.handler.CustomAuthenticationEntryPoint;
+import com.pocekt.art.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.RedisTemplate;

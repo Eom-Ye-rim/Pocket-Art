@@ -1,8 +1,9 @@
 package com.pocekt.art.repository.contest;
 
-import capstonServer.capstonServer.dto.response.ContestPageResponse;
-import capstonServer.capstonServer.entity.Contest;
-import capstonServer.capstonServer.entity.QContest;
+
+import com.pocekt.art.dto.response.ContestPageResponse;
+import com.pocekt.art.entity.Contest;
+import com.pocekt.art.entity.QContest;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -11,8 +12,9 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 
 import java.util.List;
 
-import static capstonServer.capstonServer.entity.QContest.contest;
-import static capstonServer.capstonServer.entity.QUsers.users;
+import static com.pocekt.art.entity.QContest.contest;
+import static com.pocekt.art.entity.QUsers.users;
+
 
 public class ContestCustomRepositoryImpl extends QuerydslRepositorySupport implements ContestCustomRepository {
     private JPAQueryFactory queryFactory;

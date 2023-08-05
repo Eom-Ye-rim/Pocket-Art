@@ -1,11 +1,12 @@
 package com.pocekt.art.controller;
 
-import capstonServer.capstonServer.auth.AuthUser;
-import capstonServer.capstonServer.dto.request.UserRequestDto;
-import capstonServer.capstonServer.dto.response.Response;
-import capstonServer.capstonServer.entity.Users;
-import capstonServer.capstonServer.service.MyPageService;
-import capstonServer.capstonServer.service.UsersService;
+
+import com.pocekt.art.auth.AuthUser;
+import com.pocekt.art.dto.request.UserRequestDto;
+import com.pocekt.art.dto.response.Response;
+import com.pocekt.art.entity.Users;
+import com.pocekt.art.service.MyPageService;
+import com.pocekt.art.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

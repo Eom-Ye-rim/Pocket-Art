@@ -1,8 +1,9 @@
 package com.pocekt.art.controller;
 
-import capstonServer.capstonServer.auth.AuthUser;
-import capstonServer.capstonServer.entity.Users;
-import capstonServer.capstonServer.service.LikeService;
+
+import com.pocekt.art.auth.AuthUser;
+import com.pocekt.art.entity.Users;
+import com.pocekt.art.service.LikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

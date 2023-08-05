@@ -1,6 +1,7 @@
 package com.pocekt.art.dto.response;
 
-import capstonServer.capstonServer.entity.Comment;
+
+import com.pocekt.art.entity.Comment;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

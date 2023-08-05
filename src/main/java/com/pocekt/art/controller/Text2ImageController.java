@@ -1,8 +1,9 @@
 package com.pocekt.art.controller;
 
-import capstonServer.capstonServer.service.AIService;
-import capstonServer.capstonServer.service.PapagoService;
-import capstonServer.capstonServer.service.StorageService;
+
+import com.pocekt.art.service.AIService;
+import com.pocekt.art.service.PapagoService;
+import com.pocekt.art.service.StorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

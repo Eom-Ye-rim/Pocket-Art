@@ -1,12 +1,13 @@
 package com.pocekt.art.service;
 
-import capstonServer.capstonServer.dto.request.UserRequestDto;
-import capstonServer.capstonServer.dto.response.Response;
-import capstonServer.capstonServer.entity.Contest;
-import capstonServer.capstonServer.entity.Users;
-import capstonServer.capstonServer.repository.UsersRepository;
-import capstonServer.capstonServer.repository.comment.CommentRepository;
-import capstonServer.capstonServer.repository.contest.ContestRepository;
+
+import com.pocekt.art.dto.request.UserRequestDto;
+import com.pocekt.art.dto.response.Response;
+import com.pocekt.art.entity.Contest;
+import com.pocekt.art.entity.Users;
+import com.pocekt.art.repository.UsersRepository;
+import com.pocekt.art.repository.comment.CommentRepository;
+import com.pocekt.art.repository.contest.ContestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class MyPageService {
     private final PasswordEncoder passwordEncoder;
     private final Response response;
     @Transactional
-    public ResponseEntity<?> updateInfo(Users user,UserRequestDto.Info info) {
+    public ResponseEntity<?> updateInfo(Users user, UserRequestDto.Info info) {
         try {
             Users users = usersRepository.findById(user.getId()).orElseThrow(() -> new IllegalArgumentException(String.format("user not Found!")));
             if (info.getEmail()!=null){

@@ -1,5 +1,6 @@
 package com.pocekt.art.repository;
-import capstonServer.capstonServer.entity.GPTQuestion;
+
+import com.pocekt.art.entity.GPTQuestion;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 

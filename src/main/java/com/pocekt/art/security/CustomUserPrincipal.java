@@ -1,6 +1,7 @@
 package com.pocekt.art.security;
 
-import capstonServer.capstonServer.entity.Users;
+
+import com.pocekt.art.entity.Users;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,13 +1,15 @@
 package com.pocekt.art.service;
 
-import capstonServer.capstonServer.dto.response.Response;
-import capstonServer.capstonServer.entity.Contest;
-import capstonServer.capstonServer.entity.Likes;
-import capstonServer.capstonServer.entity.Users;
-import capstonServer.capstonServer.repository.LikeRepository;
-import capstonServer.capstonServer.repository.UsersRepository;
-import capstonServer.capstonServer.repository.contest.ContestRepository;
+
+
 import com.amazonaws.services.kms.model.NotFoundException;
+import com.pocekt.art.dto.response.Response;
+import com.pocekt.art.entity.Contest;
+import com.pocekt.art.entity.Likes;
+import com.pocekt.art.entity.Users;
+import com.pocekt.art.repository.LikeRepository;
+import com.pocekt.art.repository.UsersRepository;
+import com.pocekt.art.repository.contest.ContestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

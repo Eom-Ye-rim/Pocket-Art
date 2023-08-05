@@ -1,8 +1,8 @@
 package com.pocekt.art.repository;
 
-import capstonServer.capstonServer.entity.Contest;
-import capstonServer.capstonServer.entity.Likes;
-import capstonServer.capstonServer.entity.Users;
+import com.pocekt.art.entity.Contest;
+import com.pocekt.art.entity.Likes;
+import com.pocekt.art.entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -1,6 +1,7 @@
 package com.pocekt.art.repository.comment;
 
-import capstonServer.capstonServer.entity.Comment;
+
+import com.pocekt.art.entity.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

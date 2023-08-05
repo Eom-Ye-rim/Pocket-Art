@@ -1,15 +1,17 @@
 package com.pocekt.art.repository.comment;
 
-import capstonServer.capstonServer.dto.response.CommentResponse;
-import capstonServer.capstonServer.entity.Comment;
+
+import com.pocekt.art.dto.response.CommentResponse;
+import com.pocekt.art.entity.Comment;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import static com.pocekt.art.dto.response.CommentResponse.convertCommentToDto;
+import static com.pocekt.art.entity.QComment.comment;
 import java.util.*;
 
-import static capstonServer.capstonServer.dto.response.CommentResponse.convertCommentToDto;
-import static capstonServer.capstonServer.entity.QComment.comment;
+
 @RequiredArgsConstructor
 @Repository
 public class CommentRepositoryImpl implements CommentCustomRepository{

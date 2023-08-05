@@ -1,15 +1,13 @@
 package com.pocekt.art.service;
 
-
-import capstonServer.capstonServer.dto.request.GPTCompletionChatRequest;
-import capstonServer.capstonServer.dto.request.GPTCompletionRequest;
-import capstonServer.capstonServer.dto.response.CompletionChatResponse;
-import capstonServer.capstonServer.dto.response.CompletionResponse;
-import capstonServer.capstonServer.dto.response.CompletionResponse.Message;
-import capstonServer.capstonServer.entity.GPTAnswer;
-import capstonServer.capstonServer.entity.GPTQuestion;
-import capstonServer.capstonServer.repository.GPTAnswerRepository;
-import capstonServer.capstonServer.repository.GPTQuestionRepository;
+import com.pocekt.art.dto.request.GPTCompletionChatRequest;
+import com.pocekt.art.dto.request.GPTCompletionRequest;
+import com.pocekt.art.dto.response.CompletionChatResponse;
+import com.pocekt.art.dto.response.CompletionResponse;
+import com.pocekt.art.entity.GPTAnswer;
+import com.pocekt.art.entity.GPTQuestion;
+import com.pocekt.art.repository.GPTAnswerRepository;
+import com.pocekt.art.repository.GPTQuestionRepository;
 import com.theokanning.openai.completion.CompletionResult;
 import com.theokanning.openai.completion.chat.ChatCompletionResult;
 import com.theokanning.openai.service.OpenAiService;
@@ -20,6 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import com.pocekt.art.dto.response.CompletionResponse.Message;
+
+
 
 @Service
 @RequiredArgsConstructor

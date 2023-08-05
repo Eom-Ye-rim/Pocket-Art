@@ -1,11 +1,12 @@
 package com.pocekt.art.dto.response;
 
 
-import capstonServer.capstonServer.entity.Contest;
-import capstonServer.capstonServer.entity.Photo;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.pocekt.art.entity.Contest;
+import com.pocekt.art.entity.Photo;
 import lombok.Getter;
 import lombok.Setter;
 

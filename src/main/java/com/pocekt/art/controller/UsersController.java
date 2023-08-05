@@ -1,12 +1,12 @@
 package com.pocekt.art.controller;
 
 
-import capstonServer.capstonServer.dto.request.UserRequestDto;
-import capstonServer.capstonServer.dto.response.Response;
-import capstonServer.capstonServer.dto.response.ResponseMsg;
-import capstonServer.capstonServer.service.EmailService;
-import capstonServer.capstonServer.service.KaKaoService;
-import capstonServer.capstonServer.service.UsersService;
+import com.pocekt.art.dto.request.UserRequestDto;
+import com.pocekt.art.dto.response.Response;
+import com.pocekt.art.dto.response.ResponseMsg;
+import com.pocekt.art.service.EmailService;
+import com.pocekt.art.service.KaKaoService;
+import com.pocekt.art.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

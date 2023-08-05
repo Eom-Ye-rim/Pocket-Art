@@ -1,6 +1,7 @@
 package com.pocekt.art.repository.contest;
 
-import capstonServer.capstonServer.entity.Contest;
+
+import com.pocekt.art.entity.Contest;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

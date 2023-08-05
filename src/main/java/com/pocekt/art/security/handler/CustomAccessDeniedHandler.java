@@ -1,7 +1,8 @@
 package com.pocekt.art.security.handler;
 
-import capstonServer.capstonServer.dto.response.ExceptionResponse;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pocekt.art.dto.response.ExceptionResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

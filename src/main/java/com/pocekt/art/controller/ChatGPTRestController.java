@@ -1,10 +1,11 @@
 package com.pocekt.art.controller;
 
-import capstonServer.capstonServer.dto.request.GPTCompletionChatRequest;
-import capstonServer.capstonServer.dto.request.GPTCompletionRequest;
-import capstonServer.capstonServer.dto.response.CompletionChatResponse;
-import capstonServer.capstonServer.dto.response.CompletionResponse;
-import capstonServer.capstonServer.service.GPTChatRestService;
+
+import com.pocekt.art.dto.request.GPTCompletionChatRequest;
+import com.pocekt.art.dto.request.GPTCompletionRequest;
+import com.pocekt.art.dto.response.CompletionChatResponse;
+import com.pocekt.art.dto.response.CompletionResponse;
+import com.pocekt.art.service.GPTChatRestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

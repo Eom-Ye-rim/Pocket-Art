@@ -1,7 +1,8 @@
 package com.pocekt.art.repository.contest;
 
-import capstonServer.capstonServer.dto.response.ContestPageResponse;
-import capstonServer.capstonServer.entity.Contest;
+
+import com.pocekt.art.dto.response.ContestPageResponse;
+import com.pocekt.art.entity.Contest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;

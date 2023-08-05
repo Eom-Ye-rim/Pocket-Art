@@ -1,8 +1,9 @@
 package com.pocekt.art.service;
 
 
-import capstonServer.capstonServer.dto.request.GPTCompletionRequest;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pocekt.art.dto.request.GPTCompletionRequest;
 import com.theokanning.openai.service.OpenAiService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

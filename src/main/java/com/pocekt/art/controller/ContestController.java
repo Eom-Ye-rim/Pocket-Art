@@ -1,10 +1,11 @@
 package com.pocekt.art.controller;
 
-import capstonServer.capstonServer.auth.AuthUser;
-import capstonServer.capstonServer.dto.request.ContestRequest;
-import capstonServer.capstonServer.entity.Users;
-import capstonServer.capstonServer.service.ContestService;
-import capstonServer.capstonServer.service.S3Service;
+
+import com.pocekt.art.auth.AuthUser;
+import com.pocekt.art.dto.request.ContestRequest;
+import com.pocekt.art.entity.Users;
+import com.pocekt.art.service.ContestService;
+import com.pocekt.art.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -52,7 +53,7 @@ public class ContestController {
     @PreAuthorize("hasAnyRole('USER')")
     @PostMapping(value = "",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity writeContest(@ApiIgnore @AuthUser Users users,
-                                     ContestRequest contestRequest,   @RequestPart("files") List<MultipartFile> files ) throws IOException {
+                                       ContestRequest contestRequest, @RequestPart("files") List<MultipartFile> files ) throws IOException {
         if(files ==null){
             throw new IllegalArgumentException("wrong input image");
         }

@@ -1,7 +1,8 @@
 package com.pocekt.art.dto.request;
 
-import capstonServer.capstonServer.common.GenericMapper;
-import capstonServer.capstonServer.entity.Comment;
+
+import com.pocekt.art.common.GenericMapper;
+import com.pocekt.art.entity.Comment;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

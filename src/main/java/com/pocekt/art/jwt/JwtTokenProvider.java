@@ -1,7 +1,8 @@
 package com.pocekt.art.jwt;
 
-import capstonServer.capstonServer.dto.response.UserResponseDto;
-import capstonServer.capstonServer.security.CustomUserPrincipal;
+
+import com.pocekt.art.dto.response.UserResponseDto;
+import com.pocekt.art.security.CustomUserPrincipal;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

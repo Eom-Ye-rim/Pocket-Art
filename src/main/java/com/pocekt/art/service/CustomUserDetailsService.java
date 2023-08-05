@@ -2,9 +2,9 @@ package com.pocekt.art.service;
 
 
 
-import capstonServer.capstonServer.entity.Users;
-import capstonServer.capstonServer.repository.UsersRepository;
-import capstonServer.capstonServer.security.CustomUserPrincipal;
+import com.pocekt.art.entity.Users;
+import com.pocekt.art.repository.UsersRepository;
+import com.pocekt.art.security.CustomUserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

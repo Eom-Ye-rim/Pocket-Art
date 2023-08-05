@@ -1,7 +1,8 @@
 package com.pocekt.art.entity;
 
 
-import capstonServer.capstonServer.common.BaseEntity;
+
+import com.pocekt.art.common.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

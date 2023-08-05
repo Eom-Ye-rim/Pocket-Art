@@ -1,9 +1,10 @@
 package com.pocekt.art.controller;
 
-import capstonServer.capstonServer.auth.AuthUser;
-import capstonServer.capstonServer.dto.request.CommentRequest;
-import capstonServer.capstonServer.entity.Users;
-import capstonServer.capstonServer.service.CommentService;
+
+import com.pocekt.art.auth.AuthUser;
+import com.pocekt.art.dto.request.CommentRequest;
+import com.pocekt.art.entity.Users;
+import com.pocekt.art.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
