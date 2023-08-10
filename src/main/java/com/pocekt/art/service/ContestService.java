@@ -5,6 +5,8 @@ import com.pocekt.art.dto.request.ContestRequest;
 import com.pocekt.art.dto.response.ContestPageResponse;
 import com.pocekt.art.dto.response.ContestResponse;
 import com.pocekt.art.dto.response.Response;
+import com.pocekt.art.entity.BoardType;
+import com.pocekt.art.entity.SearchType;
 import com.pocekt.art.entity.Contest;
 import com.pocekt.art.entity.Photo;
 import com.pocekt.art.entity.Users;
@@ -13,6 +15,7 @@ import com.pocekt.art.repository.UsersRepository;
 import com.pocekt.art.repository.contest.ContestRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -33,8 +36,6 @@ import java.util.Objects;
 @Slf4j
 @Service
 public class ContestService {
-
-
     private final ContestRepository contestRepository;
     private final UsersRepository usersRepository;
 
@@ -57,17 +58,19 @@ public class ContestService {
     }
 
 
-    public ResponseEntity getContestList(Pageable pageable, String title, String contents) {
-        try {
-            List<ContestPageResponse> contestPageResponseList = contestRepository.findPageContest(pageable, title, contents);
+    //검색 기능 (제목, 제목 + 내용, 작성자 ) , 정렬 기능 (최신순, 좋아요 많은 순) , 카테고리 클릭
+    public PageImpl<ContestPageResponse> getContestList(Pageable pageable) {
+        PageImpl<ContestPageResponse> result = contestRepository.getContestList(pageable);
+        return result;
 
-            return response.success(contestPageResponseList, "컨테스트 페이지 조회 성공", HttpStatus.OK);
-        }
-            catch (Exception e) {
-                return response.fail("컨테스트 페이지 조회 실패",HttpStatus.BAD_REQUEST);
-            }
 
     }
+
+    public PageImpl<ContestPageResponse> getPageListWithSearch(BoardType boardType, SearchType searchCondition, Pageable pageable){
+        PageImpl<ContestPageResponse> result = contestRepository.getQuestionListPageWithSearch(boardType, searchCondition, pageable);
+        return result;
+    }
+
     //컨테스트 response 하나더 만들기 
     public ResponseEntity getTop5ContestsByLikes() {
         List<Contest> contestImage=contestRepository.findTop5ContestsByLikes();
@@ -83,7 +86,7 @@ public class ContestService {
     public ResponseEntity findById(Users users, Long contestId) {
         try {
             String contestViewCountKey = CONTEST_VIEW_COUNT_KEY + contestId;
-
+            Contest contest = contestRepository.findById(contestId).orElseThrow(() -> new RuntimeException("Contest post not found"));
             HashOperations<String, String, Long> hashOps = redisTemplate.opsForHash();
 
             // 현재 시간을 UTC 기준으로 계산
@@ -104,7 +107,7 @@ public class ContestService {
                     hashOps.put(contestViewCountKey, users.getName(), expirationTime.toEpochSecond(ZoneOffset.UTC));
                 } else {
                     // 아직 만료 시간이 지나지 않았으면 조회수를 증가시키지 않음
-                    Contest contest = contestRepository.findById(contestId).orElseThrow(() -> new RuntimeException("Contest post not found"));
+                    contest = contestRepository.findById(contestId).orElseThrow(() -> new RuntimeException("Contest post not found"));
                     System.out.println(contest.getViewCount());
 
                 }
@@ -113,11 +116,12 @@ public class ContestService {
                 redisTemplate.expireAt(contestViewCountKey, Instant.ofEpochSecond(unixTime));
                 viewCount = hashOps.increment(contestViewCountKey, "viewCount", 1L);
 
+
+                contest = contestRepository.findById(contestId).orElseThrow(() -> new RuntimeException("Contest post not found"));
+                contest.setViewCount((int) viewCount);
+                contestRepository.save(contest);
+                System.out.println(contest.getViewCount());
             }
-            Contest contest = contestRepository.findById(contestId).orElseThrow(() -> new RuntimeException("Contest post not found"));
-            contest.setViewCount((int) viewCount);
-            contestRepository.save(contest);
-            System.out.println(contest.getViewCount());
             return response.success(new ContestResponse(contest), "컨테스트 상세 글 확인", HttpStatus.OK);
         }  catch (Exception e) {
             return response.fail("컨테스트 상세 글 확인 실패",HttpStatus.BAD_REQUEST);
@@ -135,11 +139,13 @@ public class ContestService {
         try {
             Contest contest = Contest.builder()
                     .title(contestRequest.getTitle())
+                    .boardType(contestRequest.getType())
                     .author(users.getName())
                     .contents(contestRequest.getContents())
                     .category(contestRequest.getCategory())
                     .style(contestRequest.getStyle())
                     .users(users)
+
                     .build();
 
             Contest saveContest=contestRepository.save(contest);
@@ -169,16 +175,37 @@ public class ContestService {
 
     //수정
     @Transactional
-    public ResponseEntity updateContest(Users users, Long contestId, ContestRequest contestRequest) throws IOException {
+    public ResponseEntity updateContest(Users users, Long contestId, ContestRequest contestRequest, List<String> files) throws IOException {
 
         try {
             Contest contest = contestRepository.findById(contestId).orElseThrow(() -> new IllegalArgumentException(String.format("contest is not Found!")));
             List<Photo> photo = photoRepository.findByContestId(contestId);
-            if (checkContestLoginUser(users, contest)) {
-                contest.setTitle(contestRequest.getTitle());
-                contest.setAuthor(users.getName());
-                contest.setContents(contestRequest.getContents());
+            if (!checkContestLoginUser(users, contest)) {
+                return response.fail("컨테스트 수정 실패", HttpStatus.UNAUTHORIZED);
             }
+
+            contest.setTitle(contestRequest.getTitle());
+            contest.setAuthor(users.getName());
+            contest.setContents(contestRequest.getContents());
+
+
+            if (!files.isEmpty()) {
+                List<Photo> existingPhotos = photoRepository.findByContestId(contestId);
+
+                // 기존 photo 삭제
+                photoRepository.deleteAll(existingPhotos);
+
+                List<Photo> newPhotos = new ArrayList<>();
+                for (String file : files) {
+                    Photo newPhoto = new Photo(file, contest);
+                    newPhotos.add(newPhoto);
+                }
+
+                // 새로운 사진 등록
+                photoRepository.saveAll(newPhotos);
+                contest.setPhotoList(newPhotos);
+            }
+
 
             usersRepository.save(users);
             return response.success(new ContestResponse(contest), "컨테스트 글 수정 성공", HttpStatus.OK);

@@ -3,11 +3,15 @@ package com.pocekt.art.controller;
 
 import com.pocekt.art.auth.AuthUser;
 import com.pocekt.art.dto.request.ContestRequest;
+import com.pocekt.art.dto.response.ContestPageResponse;
+import com.pocekt.art.entity.BoardType;
+import com.pocekt.art.entity.SearchType;
 import com.pocekt.art.entity.Users;
 import com.pocekt.art.service.ContestService;
 import com.pocekt.art.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
@@ -18,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -30,11 +35,26 @@ public class ContestController {
     private final S3Service s3Service;
 
     @PreAuthorize("hasAnyRole('USER')")
-    @GetMapping("")
-    public ResponseEntity getContestList(@PageableDefault Pageable pageable, @RequestParam(required = false) String title, @RequestParam(required = false) String contents) {
-        return contestService.getContestList(pageable, title,contents);
+    @GetMapping("/all")
+    public ResponseEntity getCommunityList(
+            @RequestParam(required = false) BoardType boardType, @RequestBody SearchType searchCondition, Pageable pageable) {
+        PageImpl<ContestPageResponse> responseDTO;
 
+        System.out.println(boardType);
+        //검색조건중 모든 내용을 입력하지 않고 요청을 보냈을 때 일반 목록 페이지 출력
+        if (boardType==null && searchCondition.getContent().isEmpty() && searchCondition.getWriter().isEmpty() && searchCondition.getTitle().isEmpty()) {
+            responseDTO = contestService.getContestList(pageable);
+        } else {
+            if (boardType == null) {
+                boardType = BoardType.ALL;
+            }
+            responseDTO = contestService.getPageListWithSearch(boardType,searchCondition, pageable);
+
+        }
+        return ResponseEntity.ok()
+                .body(responseDTO);
     }
+
 
     @GetMapping("/best")
     public ResponseEntity getBestImageList(){
@@ -53,7 +73,7 @@ public class ContestController {
     @PreAuthorize("hasAnyRole('USER')")
     @PostMapping(value = "",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity writeContest(@ApiIgnore @AuthUser Users users,
-                                       ContestRequest contestRequest, @RequestPart("files") List<MultipartFile> files ) throws IOException {
+                                       @RequestPart(value = "contestRequest")ContestRequest contestRequest, @RequestPart("files") List<MultipartFile> files ) throws IOException {
         if(files ==null){
             throw new IllegalArgumentException("wrong input image");
         }
@@ -65,8 +85,13 @@ public class ContestController {
     @PreAuthorize("hasAnyRole('USER')")
     @PutMapping(value = "/{contestId}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE )
     public ResponseEntity updateContest(@ApiIgnore @AuthUser Users users, @PathVariable Long contestId,
-                                      ContestRequest contestRequest) throws IOException {
-        return contestService.updateContest(users, contestId,contestRequest);
+                                      @RequestPart(value = "contestRequest") ContestRequest contestRequest,@RequestPart(required=false ) List<MultipartFile> files) throws IOException {
+        List<String> photoList = new ArrayList<>();
+
+        if (files != null && !files.isEmpty()) {
+            photoList = s3Service.upload(files); //중복 생길 듯
+        }
+        return contestService.updateContest(users, contestId,contestRequest,photoList);
         //return new ResponseEntity(new ApiRes("스터디 수정 성공", HttpStatus.OK), HttpStatus.OK);
     }
 

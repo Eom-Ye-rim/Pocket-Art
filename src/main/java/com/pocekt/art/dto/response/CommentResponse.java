@@ -13,7 +13,7 @@ import java.util.List;
 public class CommentResponse {
     private Long id;
     private String content;
-    private Long parentId;
+
     private String author;
     private List<CommentResponse> children = new ArrayList<>();
 

@@ -13,4 +13,6 @@ import java.util.UUID;
 @Repository
 public interface ContestRepository extends JpaRepository<Contest,Long> , ContestCustomRepository {
     List<Contest> findAllByUsers_Id(UUID users_id);
+
+
 }

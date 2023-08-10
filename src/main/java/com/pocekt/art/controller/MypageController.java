@@ -24,7 +24,6 @@ public class MypageController {
     private final MyPageService mypageService;
     private final Response response;
 
-    //Todo 회원 정보 수정한 이후 게시글 이름들도 다 변경?
     @PreAuthorize("hasAnyRole('USER')")
     @PostMapping(value = "")
     public ResponseEntity updateInfo(@ApiIgnore @AuthUser Users users,

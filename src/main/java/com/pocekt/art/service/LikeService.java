@@ -41,7 +41,9 @@ public class LikeService {
 
         likeRepository.save(likes);
         contestRepository.updateLikeCount(contest);
-        return response.success(likes, "좋아요를 눌렀습니다..", HttpStatus.CREATED);
+
+
+        return response.success(contest.getLikecnt(), "좋아요를 눌렀습니다..", HttpStatus.CREATED);
     }
 
 
@@ -59,6 +61,6 @@ public class LikeService {
         likeRepository.delete(likes);
         contestRepository.subLikeCount(contest);
 
-        return response.success(likes, "좋아요를 취소하였습니다..", HttpStatus.CREATED);
+        return response.success(contest.getLikecnt(), "좋아요를 취소하였습니다..", HttpStatus.CREATED);
     }
 }

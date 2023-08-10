@@ -36,16 +36,12 @@ public class Contest extends BaseTime {
     private String style; // 화풍
 
     @ColumnDefault("0")
-    @Column(name="like_count")
-    private Integer likeCount ;
+    @Column
+    private int likecnt;
 
-//    @Column(name = "contestCategory",nullable = false) //카테고리
-//    @Enumerated(value = EnumType.STRING)
-//    private ContestCategory.Category contestCategory;
+    @Enumerated(EnumType.STRING)
+    private BoardType boardType;
 
-//    @Column(name = "paintingStyle",nullable = false) // 화풍
-//    @Enumerated(value = EnumType.STRING)
-//    private ContestCategory.Paint style;
 
     @ColumnDefault("0")
     @Column(name="VIEW_COUNT")
@@ -64,12 +60,17 @@ public class Contest extends BaseTime {
     @JoinColumn(name="users_id")
     private Users users;
 
+    @OneToMany(mappedBy = "contest")
+    private List<Comment> commentList=new ArrayList<>();
+
+
     @Builder
-    public Contest(String title, String author, String contents, String category, String style,Users users) {
+    public Contest(String title, String author, String contents, String category,BoardType boardType, String style,Users users) {
         this.title = title;
         this.author=author;
         this.contents=contents;
         this.category=category;
+        this.boardType=boardType;
         this.style=style;
         this.users = users;
 
