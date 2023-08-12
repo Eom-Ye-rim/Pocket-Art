@@ -18,19 +18,21 @@ import java.util.List;
 @JsonNaming(value = PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class ContestPageResponse {
     //제목, 작성자, 조회수 , 댓글수
+    private Long id;
     private String title; //제목
     private String author; //작성자
     private int view_count; //조회수
-    private int likeCount; // 좋아요 수
+    private int likecnt; // 좋아요 수
     private int comment_cnt; //댓글 수
     private String firstPhoto;
 
 
     public ContestPageResponse(Contest contest) {
-
+        this.id=contest.getId();
         this.title = contest.getTitle();
         this.author = contest.getAuthor();
         this.view_count = contest.getViewCount();
+        this.likecnt=contest.getLikecnt();
         this.comment_cnt = contest.getCommentList().size();
         List<Photo> photoList = contest.getPhotoList();
         if (photoList != null && !photoList.isEmpty()) {

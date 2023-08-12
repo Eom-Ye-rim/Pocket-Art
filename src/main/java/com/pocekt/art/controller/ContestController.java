@@ -34,8 +34,8 @@ public class ContestController {
     private final ContestService contestService;
     private final S3Service s3Service;
 
-    @PreAuthorize("hasAnyRole('USER')")
-    @GetMapping("/all")
+//    @PreAuthorize("hasAnyRole('USER')")
+    @PostMapping("/all")
     public ResponseEntity getCommunityList(
             @RequestParam(required = false) BoardType boardType, @RequestBody SearchType searchCondition, Pageable pageable) {
         PageImpl<ContestPageResponse> responseDTO;

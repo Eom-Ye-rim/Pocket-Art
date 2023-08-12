@@ -124,6 +124,7 @@ public class UsersService {
 
     public ResponseEntity<?> kakaoLogin(String access_Token) throws IOException {
         Map<String, Object> userInfo = kaKaoService.getUserInfo(access_Token);
+        System.out.println(userInfo);
 
         Users users = Users.builder()
                 .email(userInfo.get("email").toString())

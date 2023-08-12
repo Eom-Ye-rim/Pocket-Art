@@ -33,10 +33,8 @@ public class EmailServiceImpl implements EmailService{
         System.out.println("보내는 대상 : "+ to);
         System.out.println("인증 번호 : "+ eCode);
         MimeMessage  message = emailSender.createMimeMessage();
-
         message.addRecipients(RecipientType.TO, to);//보내는 대상
         message.setSubject("이메일 인증 테스트");//제목
-
         String msgg="";
         msgg+= "<div style='margin:20px;'>";
         msgg+= "<h1> Poket Art </h1>";
@@ -53,9 +51,9 @@ public class EmailServiceImpl implements EmailService{
         msgg+= "</div>";
         message.setText(msgg, "utf-8", "html");//내용
         message.setFrom(new InternetAddress("yerim110324@gmail.com","Eom-ye-rim"));//보내는 사람
-
         return message;
     }
+
 
     private MimeMessage createPassword(String email)throws Exception{
         System.out.println("보내는 대상 : "+ email);
@@ -64,7 +62,6 @@ public class EmailServiceImpl implements EmailService{
 
         message.addRecipients(RecipientType.TO, email);//보내는 대상
         message.setSubject("임시 비밀번호 발급");//제목
-
         String msgg="";
         msgg+= "<div style='margin:20px;'>";
         msgg+= "<h1> Poket Art </h1>";
@@ -110,15 +107,11 @@ public class EmailServiceImpl implements EmailService{
         StringBuffer key = new StringBuffer();
         //Random rnd = new Random();
         Random random = new Random();
-
         // Generate and send 4 random numbers
         for (int i = 0; i < 4; i++) {
-            key.append(random.nextInt(10)); // Change the range as per your requirements
+            key.append(random.nextInt(10));
 
         }
-
-
-
         return key.toString();
     }
 

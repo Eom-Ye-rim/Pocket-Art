@@ -92,10 +92,6 @@ public class KaKaoService {
             while ((line = br.readLine()) != null) {
                 res += line;
             }
-
-            System.out.println("res = " + res);
-
-
             JSONParser parser = new JSONParser();
             JSONObject obj = (JSONObject) parser.parse(res);
             JSONObject kakao_account = (JSONObject) obj.get("kakao_account");
@@ -105,6 +101,7 @@ public class KaKaoService {
             String id = obj.get("id").toString();
             String nickname = properties.get("nickname").toString();
             String email = kakao_account.get("email").toString();
+
 
             result.put("id", id);
             result.put("nickname", nickname);

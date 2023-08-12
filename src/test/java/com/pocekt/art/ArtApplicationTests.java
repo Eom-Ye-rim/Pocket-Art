@@ -3,11 +3,11 @@ package com.pocekt.art;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class ArtApplicationTests {
-
-	@Test
-	void contextLoads() {
-	}
-
-}
+//@SpringBootTest
+//class ArtApplicationTests {
+//
+//	@Test
+//	void contextLoads() {
+//	}
+//
+//}

@@ -45,7 +45,7 @@ public class PapagoService {
 
     private static String post(String apiUrl, Map<String, String> requestHeaders, String text){
         HttpURLConnection con = connect(apiUrl);
-        String postParams = "source=ko&target=en&text=" + text; //원본언어: 한국어 (ko) -> 목적언어: 영어 (en)
+        String postParams = "source=ko&target=en&text=" + text; // 한국어 (ko) -> 영어 (en)
         System.out.println(postParams);
         try {
             con.setRequestMethod("POST");
