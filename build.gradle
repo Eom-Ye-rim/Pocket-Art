@@ -85,17 +85,11 @@ dependencies {
 
 	//aws
 	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.415'
-
-
 	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
-
 	implementation 'org.json:json:20210307'
 
 	//swaggerUI
 	implementation 'io.springfox:springfox-boot-starter:3.0.0'
-
-
-
 	testImplementation 'junit:junit:4.13.2'
 
 }
@@ -104,7 +98,6 @@ tasks.named('test') {
 }
 
 def querydslDir = "$buildDir/generated/'querydsl'"
-// JPA 사용여부 및 사용 경로 설정
 querydsl {
 	jpa = true
 	querydslSourcesDir = querydslDir

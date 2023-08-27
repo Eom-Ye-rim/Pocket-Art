@@ -39,7 +39,7 @@ public class ImageController {
 
     @GetMapping("")
     public static ResponseEntity<TransformedImageDTO> main(String[] args) throws ModelNotFoundException, MalformedModelException {
-        String modelPath = "gogh.pt";
+        String modelPath = "gogh_08.pt";
         String imagePath = "115.png";
         int targetWidth = 256;
         int targetHeight = 256;
