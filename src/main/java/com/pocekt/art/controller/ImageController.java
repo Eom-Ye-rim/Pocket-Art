@@ -1,5 +1,6 @@
 package com.pocekt.art.controller;
 
+
 import ai.djl.Device;
 import ai.djl.MalformedModelException;
 import ai.djl.inference.Predictor;
@@ -13,16 +14,23 @@ import ai.djl.repository.zoo.ZooModel;
 import ai.djl.translate.TranslateException;
 import ai.djl.translate.Translator;
 import ai.djl.translate.TranslatorContext;
+import com.pocekt.art.dto.request.TransformedImageDTO;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 import java.io.IOException;
 import java.nio.file.Paths;
+
 
 @RestController
 @RequestMapping("/api/v1/image")
@@ -30,8 +38,8 @@ import java.nio.file.Paths;
 public class ImageController {
 
     @GetMapping("")
-    public static void main(String[] args) throws ModelNotFoundException, MalformedModelException {
-        String modelPath = "gogh2photo_landscape_256.pt";
+    public static ResponseEntity<TransformedImageDTO> main(String[] args) throws ModelNotFoundException, MalformedModelException {
+        String modelPath = "gogh.pt";
         String imagePath = "115.png";
         int targetWidth = 256;
         int targetHeight = 256;
@@ -52,12 +60,15 @@ public class ImageController {
 
             // Create a Predictor for inference
             try (Predictor<BufferedImage, float[]> predictor = model.newPredictor(translator)) {
+
                 // Load and resize the input image
                 BufferedImage image = loadImage(imagePath);
 
                 BufferedImage t_image = transposeImage(image);
 
                 BufferedImage resizedImage = resizeImage(t_image, targetWidth, targetHeight);
+
+
                 //모델 예측
                 float[] result = predictor.predict(resizedImage);
 
@@ -67,10 +78,20 @@ public class ImageController {
                     result[i] += 0.5;
                     result[i] *= 255;
                 }
+
+
                 //System.out.println(Arrays.toString(result));
 
                 //형 변환
                 BufferedImage output = getImageFromFloatArray(result, targetWidth, targetHeight);
+
+                TransformedImageDTO transformedImageDTO = new TransformedImageDTO();
+                transformedImageDTO.setWidth(targetWidth);
+                transformedImageDTO.setHeight(targetHeight);
+                transformedImageDTO.setData(result);
+
+                return ResponseEntity.ok(transformedImageDTO);
+
 
                 /*
                 BufferedImage resizedImage2 = resizeImage(image, targetWidth, targetHeight);
@@ -87,6 +108,8 @@ public class ImageController {
                 BufferedImage output2 = getImageFromFloatArray(result2, targetWidth, targetHeight);
 
                 */
+
+
                 //시각화
 //                JFrame frame = new JFrame();
 //                frame.getContentPane().setLayout(new FlowLayout());
@@ -97,10 +120,13 @@ public class ImageController {
 //                //frame.getContentPane().add(new JLabel(new ImageIcon(output2)));
 //                frame.pack();
 //                frame.setVisible(true);
+
+
             }
         } catch (IOException  | TranslateException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
 
@@ -118,6 +144,9 @@ public class ImageController {
     private static BufferedImage loadImage(String imagePath) throws IOException {
         return ImageIO.read(Paths.get(imagePath).toFile());
     }
+
+
+
 
     public static BufferedImage transposeImage(BufferedImage image) {
         int width = image.getWidth();
@@ -158,12 +187,10 @@ public class ImageController {
         private int targetWidth;
         private int targetHeight;
 
-
         public ImageTranslator(int targetWidth, int targetHeight) {
             this.targetWidth = targetWidth;
             this.targetHeight = targetHeight;
         }
-
 
         @Override
         public NDList processInput(TranslatorContext ctx, BufferedImage image) {
@@ -174,7 +201,10 @@ public class ImageController {
                     .divi(255)
                     .sub(0.5)
                     .divi(0.5);
+
+
             //System.out.println(Arrays.toString(array.toArray()));
+
             return new NDList(array.transpose(2,0,1));
         }
         @Override
