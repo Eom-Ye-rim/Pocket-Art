@@ -10,3 +10,4 @@ public class TransformedImageDTO {
     private int height;
     private float[] data;
 }
+

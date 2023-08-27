@@ -1,7 +1,6 @@
 package com.pocekt.art.controller;
 
 
-
 import ai.djl.Device;
 import ai.djl.MalformedModelException;
 import ai.djl.inference.Predictor;
