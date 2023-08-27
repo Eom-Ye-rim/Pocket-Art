@@ -5,12 +5,9 @@ import com.pocekt.art.dto.request.ContestRequest;
 import com.pocekt.art.dto.response.ContestPageResponse;
 import com.pocekt.art.dto.response.ContestResponse;
 import com.pocekt.art.dto.response.Response;
-import com.pocekt.art.entity.BoardType;
-import com.pocekt.art.entity.SearchType;
-import com.pocekt.art.entity.Contest;
-import com.pocekt.art.entity.Photo;
-import com.pocekt.art.entity.Users;
+import com.pocekt.art.entity.*;
 import com.pocekt.art.repository.PhotoRepository;
+import com.pocekt.art.repository.TagRepository;
 import com.pocekt.art.repository.UsersRepository;
 import com.pocekt.art.repository.contest.ContestRepository;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +37,7 @@ public class ContestService {
     private final UsersRepository usersRepository;
 
     private final PhotoRepository photoRepository;
+    private final TagRepository tagRepository;
 
     private final S3Service s3Service;
 
@@ -48,6 +46,7 @@ public class ContestService {
     private static final String CONTEST_VIEW_COUNT_KEY = "contest:viewCount:";
     private static final int EXPIRATION_DAYS = 1;
     private final RedisTemplate redisTemplate;
+
 
 
 
@@ -142,7 +141,6 @@ public class ContestService {
                     .boardType(contestRequest.getType())
                     .author(users.getName())
                     .contents(contestRequest.getContents())
-                    .category(contestRequest.getCategory())
                     .style(contestRequest.getStyle())
                     .users(users)
 
@@ -152,6 +150,13 @@ public class ContestService {
             Users saveUsers = usersRepository.findById(users.getId()).get();
             saveUsers.getContestList().add(contest);
             List<String> photoList=new ArrayList<>();
+            List<String> tagList=new ArrayList<>();
+            for(String tag:contestRequest.getHashtag()){
+                HashTag hashTag=new HashTag(tag,contest);
+                tagRepository.save(hashTag);
+                saveContest.addHashtag(hashTag);
+                tagList.add(tag);
+            }
 
             for (String file : files) {
                     Photo photo =new Photo(file,contest);

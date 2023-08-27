@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.pocekt.art.entity.Contest;
+import com.pocekt.art.entity.HashTag;
 import com.pocekt.art.entity.Photo;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,6 +26,7 @@ public class ContestResponse {
     private int viewCount;
 
     private List<String> photoList;
+    private List<String> tagList;
 
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
@@ -46,6 +48,17 @@ public class ContestResponse {
                 String fileUrl = photo.getFileUrl();
                 if (fileUrl != null) {
                     this.photoList.add(fileUrl);
+                }
+            }
+
+        }
+        this.tagList = new ArrayList<>();
+        List<HashTag> Hashtag = contest.getTagList();
+        if (Hashtag != null) {
+            for (HashTag tag : Hashtag) {
+                String hashtagName = tag.getTagname();
+                if (hashtagName != null) {
+                    this.tagList.add(hashtagName);
                 }
             }
 

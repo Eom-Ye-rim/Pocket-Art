@@ -30,9 +30,6 @@ public class Contest extends BaseTime {
     private String contents; //내용
 
     @Column
-    private String category; // 카테고리
-
-    @Column
     private String style; // 화풍
 
     @ColumnDefault("0")
@@ -63,13 +60,15 @@ public class Contest extends BaseTime {
     @OneToMany(mappedBy = "contest")
     private List<Comment> commentList=new ArrayList<>();
 
+    @OneToMany(mappedBy = "contest")
+    private List<HashTag> tagList=new ArrayList<>();
+
 
     @Builder
     public Contest(String title, String author, String contents, String category,BoardType boardType, String style,Users users) {
         this.title = title;
         this.author=author;
         this.contents=contents;
-        this.category=category;
         this.boardType=boardType;
         this.style=style;
         this.users = users;
@@ -79,6 +78,11 @@ public class Contest extends BaseTime {
     public void writePhoto(Photo photo){
         photoList.add(photo);
         photo.setContest(this);
+    }
+
+    public void addHashtag(HashTag hashTag){
+        tagList.add(hashTag);
+        hashTag.setContest(this);
     }
 }
 

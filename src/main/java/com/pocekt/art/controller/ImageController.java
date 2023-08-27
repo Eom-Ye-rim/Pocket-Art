@@ -32,7 +32,7 @@ public class ImageController {
     @GetMapping("")
     public static void main(String[] args) throws ModelNotFoundException, MalformedModelException {
         String modelPath = "gogh2photo_landscape_256.pt";
-        String imagePath = "tree.jpeg";
+        String imagePath = "115.png";
         int targetWidth = 256;
         int targetHeight = 256;
         //ImageIO.setUseCache(false);
