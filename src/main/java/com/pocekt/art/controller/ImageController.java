@@ -27,9 +27,12 @@ import javax.swing.JLabel;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 import java.awt.image.WritableRaster;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 
 @RestController
@@ -44,6 +47,15 @@ public class ImageController {
         int targetWidth = 256;
         int targetHeight = 256;
         //ImageIO.setUseCache(false);
+        File modelFile = new File(modelPath);
+        // Check if the file exists
+        if (modelFile.exists()) {
+            System.out.println("Model file exists.");
+            // Proceed with loading and using the model
+        } else {
+            System.err.println("Model file does not exist at the specified path: " + modelPath);
+            // Handle the case where the file doesn't exist
+        }
 
 
         Criteria<NDList, NDList> criteria = Criteria.builder()
@@ -72,6 +84,7 @@ public class ImageController {
                 //모델 예측
                 float[] result = predictor.predict(resizedImage);
 
+
                 //normalize 역과정
                 for (int i = 0; i < result.length; i++) {
                     result[i] *= 0.5;
@@ -80,11 +93,11 @@ public class ImageController {
                 }
 
 
-                //System.out.println(Arrays.toString(result));
+                System.out.println(Arrays.toString(result));
 
                 //형 변환
                 BufferedImage output = getImageFromFloatArray(result, targetWidth, targetHeight);
-
+                System.out.println("test"+output);
                 TransformedImageDTO transformedImageDTO = new TransformedImageDTO();
                 transformedImageDTO.setWidth(targetWidth);
                 transformedImageDTO.setHeight(targetHeight);
@@ -132,10 +145,10 @@ public class ImageController {
 
     private static BufferedImage getImageFromFloatArray(float[] data, int w, int h) {
         BufferedImage img = new BufferedImage(w, h, BufferedImage.TYPE_INT_BGR);
-       /*System.out.println("Image pixel array size: "
+       System.out.println("Image pixel array size: "
                        + ((DataBufferInt) img.getRaster().getDataBuffer())
                                .getData().length);
-       System.out.println("Datasize: " + data.length);*/
+       System.out.println("Datasize: " + data.length);
         WritableRaster raster = img.getRaster();
         raster.setPixels(0, 0, w, h, data);
         return img;
