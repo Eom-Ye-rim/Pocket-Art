@@ -43,7 +43,7 @@ public class ImageController {
 
     @GetMapping("")
     public static ResponseEntity<TransformedImageDTO> main(String[] args) {
-        String modelPath = "./models/gogh_08.pt";
+        String modelPath = "/home/ubuntu/23_HI053/models/gogh_08.pt";
         String imagePath = "115.png";
         int targetWidth = 256;
         int targetHeight = 256;
