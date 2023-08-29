@@ -31,6 +31,7 @@ import java.awt.image.DataBufferInt;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
@@ -41,13 +42,14 @@ import java.util.Arrays;
 public class ImageController {
 
     @GetMapping("")
-    public static ResponseEntity<TransformedImageDTO> main(String[] args) throws ModelNotFoundException, MalformedModelException {
-        String modelPath = "gogh_08.pt";
+    public static ResponseEntity<TransformedImageDTO> main(String[] args) {
+        String modelPath = "./models/gogh_08.pt";
         String imagePath = "115.png";
         int targetWidth = 256;
         int targetHeight = 256;
         //ImageIO.setUseCache(false);
         File modelFile = new File(modelPath);
+
         // Check if the file exists
         if (modelFile.exists()) {
             System.out.println("Model file exists.");
@@ -136,7 +138,7 @@ public class ImageController {
 
 
             }
-        } catch (IOException  | TranslateException e) {
+        } catch (IOException | TranslateException | ModelNotFoundException | MalformedModelException e) {
             e.printStackTrace();
         }
         return null;
