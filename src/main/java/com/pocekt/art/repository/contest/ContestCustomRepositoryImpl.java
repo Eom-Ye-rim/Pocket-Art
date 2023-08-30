@@ -7,7 +7,6 @@ import com.pocekt.art.entity.Contest;
 import com.pocekt.art.entity.QContest;
 import com.pocekt.art.entity.SearchType;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -19,7 +18,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.pocekt.art.entity.QContest.contest;
-import static com.pocekt.art.entity.QUsers.users;
 
 
 public class ContestCustomRepositoryImpl extends QuerydslRepositorySupport implements ContestCustomRepository {
@@ -99,7 +97,7 @@ public class ContestCustomRepositoryImpl extends QuerydslRepositorySupport imple
         if (boardType == BoardType.ALL) {
             whereClause.andAnyOf(
                     contest.boardType.eq(BoardType.AI),
-                    contest.boardType.eq(BoardType.GENERIC)
+                    contest.boardType.eq(BoardType.일반)
             );
         } else if (boardType != null) {
             whereClause.and(contest.boardType.eq(boardType));

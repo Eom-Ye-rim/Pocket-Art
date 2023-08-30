@@ -79,7 +79,7 @@ public class ContestController {
         }
         List<String> photoList = s3Service.upload(files);
         return contestService.createContest(users, contestRequest,photoList);
-        //return new ResponseEntity(new ApiRes("스터디 등록 성공", HttpStatus.CREATED), HttpStatus.CREATED);
+
     }
 
     @PreAuthorize("hasAnyRole('USER')")
