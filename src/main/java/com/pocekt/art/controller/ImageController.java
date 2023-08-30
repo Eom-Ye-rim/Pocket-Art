@@ -44,7 +44,7 @@ public class ImageController {
     @GetMapping("")
     public static ResponseEntity<TransformedImageDTO> main(String[] args) {
         String modelPath = "/home/ubuntu/23_HI053/models/gogh_08.pt";
-        String imagePath = "/home/ubuntu/23_HI053/115.png";
+        String imagePath = "/home/ubuntu/23_HI053/models/115.png";
         int targetWidth = 256;
         int targetHeight = 256;
         //ImageIO.setUseCache(false);
