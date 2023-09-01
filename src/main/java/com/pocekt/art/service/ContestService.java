@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -48,8 +49,6 @@ public class ContestService {
     private final RedisTemplate redisTemplate;
 
 
-
-
     public class RedisUtil {
         public static long getUnixTime(LocalDateTime localDateTime) {
             return localDateTime.toEpochSecond(ZoneOffset.UTC);
@@ -65,14 +64,14 @@ public class ContestService {
 
     }
 
-    public PageImpl<ContestPageResponse> getPageListWithSearch(BoardType boardType, SearchType searchCondition, Pageable pageable){
+    public PageImpl<ContestPageResponse> getPageListWithSearch(BoardType boardType, SearchType searchCondition, Pageable pageable) {
         PageImpl<ContestPageResponse> result = contestRepository.getQuestionListPageWithSearch(boardType, searchCondition, pageable);
         return result;
     }
 
     //컨테스트 response 하나더 만들기 
     public ResponseEntity getTop5ContestsByLikes() {
-        List<Contest> contestImage=contestRepository.findTop5ContestsByLikes();
+        List<Contest> contestImage = contestRepository.findTop5ContestsByLikes();
         List<ContestResponse> contestResponses = new ArrayList<>();
 
         for (Contest contest : contestImage) {
@@ -122,19 +121,18 @@ public class ContestService {
                 System.out.println(contest.getViewCount());
             }
             return response.success(new ContestResponse(contest), "컨테스트 상세 글 확인", HttpStatus.OK);
-        }  catch (Exception e) {
-            return response.fail("컨테스트 상세 글 확인 실패",HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return response.fail("컨테스트 상세 글 확인 실패", HttpStatus.BAD_REQUEST);
         }
 
         // 조회수를 증가시키고 결과를 반환
-
 
 
     }
 
     //글 생성
     @Transactional
-    public ResponseEntity createContest(Users users, ContestRequest contestRequest, List<String> files) throws IOException {
+    public ResponseEntity createContest(Users users, ContestRequest contestRequest, List<MultipartFile> files) throws IOException {
         try {
             Contest contest = Contest.builder()
                     .title(contestRequest.getTitle())
@@ -146,45 +144,52 @@ public class ContestService {
 
                     .build();
 
-            Contest saveContest=contestRepository.save(contest);
+            Contest saveContest = contestRepository.save(contest);
             Users saveUsers = usersRepository.findById(users.getId()).get();
             saveUsers.getContestList().add(contest);
-            List<String> photoList=new ArrayList<>();
-            List<String> tagList=new ArrayList<>();
-            for(String tag:contestRequest.getHashtag()){
-                HashTag hashTag=new HashTag(tag,contest);
+            ;
+            List<String> tagList = new ArrayList<>();
+            for (String tag : contestRequest.getHashtag()) {
+                HashTag hashTag = new HashTag(tag, contest);
                 tagRepository.save(hashTag);
                 saveContest.addHashtag(hashTag);
                 tagList.add(tag);
             }
+            if (files!=null) {
 
-            for (String file : files) {
-                    Photo photo =new Photo(file,contest);
-                    photoRepository.save(photo);
-                    saveContest.writePhoto(photo);
-                    photoList.add(photo.getFileUrl());
 
+                List<Photo> photoList = new ArrayList<>();
+                for (MultipartFile multipartFile : files) {
+                    Photo photo = Photo.builder()
+                            .fileName(multipartFile.getOriginalFilename())
+                            .fileSize(multipartFile.getSize())
+                            .fileUrl(s3Service.upload(multipartFile))
+                            .contest(contest)
+                            .build();
+                    photoList.add(photo);
                 }
+                photoRepository.saveAll(photoList);
+            }
 
             return response.success(new ContestResponse(contest), "컨테스트 글 등록 성공", HttpStatus.OK);
         } catch (Exception e) {
-            return response.fail(e,"컨테스트 글 등록 실패",HttpStatus.BAD_REQUEST);
+            return response.fail(e, "컨테스트 글 등록 실패", HttpStatus.BAD_REQUEST);
         }
     }
 
-    private void postBlankCheck(List<String> files){
-        if(files==null || files.isEmpty()){
+    private void postBlankCheck(List<String> files) {
+        if (files == null || files.isEmpty()) {
             throw new IllegalArgumentException("Wrong image path");
         }
     }
 
     //수정
     @Transactional
-    public ResponseEntity updateContest(Users users, Long contestId, ContestRequest contestRequest, List<String> files) throws IOException {
+    public ResponseEntity updateContest(Users users, Long contestId, ContestRequest contestRequest, List<MultipartFile> files) throws IOException {
 
         try {
             Contest contest = contestRepository.findById(contestId).orElseThrow(() -> new IllegalArgumentException(String.format("contest is not Found!")));
-            List<Photo> photo = photoRepository.findByContestId(contestId);
+
             if (!checkContestLoginUser(users, contest)) {
                 return response.fail("컨테스트 수정 실패", HttpStatus.UNAUTHORIZED);
             }
@@ -193,31 +198,37 @@ public class ContestService {
             contest.setAuthor(users.getName());
             contest.setContents(contestRequest.getContents());
 
-
             if (!files.isEmpty()) {
                 List<Photo> existingPhotos = photoRepository.findByContestId(contestId);
-
                 // 기존 photo 삭제
                 photoRepository.deleteAll(existingPhotos);
 
-                List<Photo> newPhotos = new ArrayList<>();
-                for (String file : files) {
-                    Photo newPhoto = new Photo(file, contest);
-                    newPhotos.add(newPhoto);
+                for (Photo photo : existingPhotos) {
+                    s3Service.deleteFile(photo.getFileUrl());
                 }
 
-                // 새로운 사진 등록
-                photoRepository.saveAll(newPhotos);
-                contest.setPhotoList(newPhotos);
+                //새롭게 등록
+                List<Photo> photoList = new ArrayList<>();
+                for (MultipartFile multipartFile : files) {
+                    Photo photo = Photo.builder()
+                            .fileName(multipartFile.getOriginalFilename())
+                            .fileSize(multipartFile.getSize())
+                            .fileUrl(s3Service.upload(multipartFile))
+                            .contest(contest)
+                            .build();
+                    photoList.add(photo);
+                }
+
+                photoRepository.saveAll(photoList);
             }
-
-
+            users.getContestList().add(contest);
             usersRepository.save(users);
-            return response.success(new ContestResponse(contest), "컨테스트 글 수정 성공", HttpStatus.OK);
+            return response.success("컨테스트 글 수정 성공", HttpStatus.OK);
         } catch (Exception e) {
-            return response.fail("컨테스트 글 수정 실패",HttpStatus.BAD_REQUEST);
+            return response.fail("컨테스트 글 수정 실패", HttpStatus.BAD_REQUEST);
         }
     }
+
 
     //삭제
     @Transactional

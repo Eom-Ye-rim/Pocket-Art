@@ -1,7 +1,6 @@
 package com.pocekt.art.entity;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -9,8 +8,10 @@ import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Data
+@Getter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Photo {
     @Id
     @GeneratedValue

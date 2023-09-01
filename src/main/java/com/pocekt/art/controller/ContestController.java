@@ -70,28 +70,22 @@ public class ContestController {
         return contestService.findById(users,contestId);
     }
 
+
     @PreAuthorize("hasAnyRole('USER')")
     @PostMapping(value = "",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity writeContest(@ApiIgnore @AuthUser Users users,
-                                       @RequestPart(value = "contestRequest")ContestRequest contestRequest, @RequestPart("files") List<MultipartFile> files ) throws IOException {
-        if(files ==null){
-            throw new IllegalArgumentException("wrong input image");
-        }
-        List<String> photoList = s3Service.upload(files);
-        return contestService.createContest(users, contestRequest,photoList);
+                                       @RequestPart ContestRequest contestRequest, @RequestPart(required = false) List<MultipartFile> files ) throws IOException {
 
+
+        return contestService.createContest(users, contestRequest,files);
     }
 
     @PreAuthorize("hasAnyRole('USER')")
     @PutMapping(value = "/{contestId}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE )
     public ResponseEntity updateContest(@ApiIgnore @AuthUser Users users, @PathVariable Long contestId,
                                       @RequestPart(value = "contestRequest") ContestRequest contestRequest,@RequestPart(required=false ) List<MultipartFile> files) throws IOException {
-        List<String> photoList = new ArrayList<>();
 
-        if (files != null && !files.isEmpty()) {
-            photoList = s3Service.upload(files); //중복 생길 듯
-        }
-        return contestService.updateContest(users, contestId,contestRequest,photoList);
+        return contestService.updateContest(users, contestId,contestRequest,files);
         //return new ResponseEntity(new ApiRes("스터디 수정 성공", HttpStatus.OK), HttpStatus.OK);
     }
 

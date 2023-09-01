@@ -75,10 +75,7 @@ public class Contest extends BaseTime {
 
     }
 
-    public void writePhoto(Photo photo){
-        photoList.add(photo);
-        photo.setContest(this);
-    }
+
 
     public void addHashtag(HashTag hashTag){
         tagList.add(hashTag);

@@ -160,7 +160,7 @@ public class UsersService {
         redisTemplate.opsForValue()
                 .set(logout.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
 
-        return response.success("로그아웃 되었습니다.");
+        return response.success("로그아웃 되었습니다.", HttpStatus.OK);
     }
 
     public ResponseEntity<?> authority() {

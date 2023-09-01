@@ -48,9 +48,10 @@ public class Response {
      * </pre>
      *
      * @param msg 응답 바디 message 필드에 포함될 정보
+     * @param ok
      * @return 응답 객체
      */
-    public ResponseEntity<?> success(String msg) {
+    public ResponseEntity<?> success(String msg, HttpStatus ok) {
         return success(Collections.emptyList(), msg, HttpStatus.OK);
     }
 

@@ -50,28 +50,22 @@ public class S3Service  {
                 .build();
     }
 
-    public List<String> upload(List<MultipartFile> multipartFile) {
-        List<String> imgUrlList = new ArrayList<>();
+    public String upload(MultipartFile file) {
+        String imageUrl = "";
+        String fileName = createFileName(file.getOriginalFilename());
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentLength(file.getSize());
+        objectMetadata.setContentType(file.getContentType());
 
-        // forEach 구문을 통해 multipartFile로 넘어온 파일들 하나씩 fileNameList에 추가
-        for (MultipartFile file : multipartFile) {
-            String fileName = createFileName(file.getOriginalFilename());
-
-            ObjectMetadata objectMetadata = new ObjectMetadata();
-            objectMetadata.setContentLength(file.getSize());
-            objectMetadata.setContentType(file.getContentType());
-
-            try(InputStream inputStream = file.getInputStream()) {
-                s3Client.putObject(new PutObjectRequest(bucket+"/post/image", fileName, inputStream, objectMetadata)
-                        .withCannedAcl(CannedAccessControlList.PublicRead));
-                imgUrlList.add(s3Client.getUrl(bucket+"/post/image", fileName).toString());
-            } catch(IOException e) {
-                throw new IllegalArgumentException("IMAGE_UPLOAD_ERROR");
-            }
+        try (InputStream inputStream = file.getInputStream()) {
+            s3Client.putObject(new PutObjectRequest(bucket , fileName, inputStream, objectMetadata)
+                    .withCannedAcl(CannedAccessControlList.PublicRead));
+            imageUrl = s3Client.getUrl(bucket, fileName).toString();
+        } catch (IOException e) {
+            throw new IllegalArgumentException("IMAGE_UPLOAD_ERROR");
         }
-        return imgUrlList;
+        return imageUrl;
     }
-
     // 이미지파일명 중복 방지
     private String createFileName(String fileName) {
         return UUID.randomUUID().toString().concat(getFileExtension(fileName));
@@ -89,6 +83,7 @@ public class S3Service  {
         fileValidate.add(".JPG");
         fileValidate.add(".JPEG");
         fileValidate.add(".PNG");
+        fileValidate.add(".mp4");
         String idxFileName = fileName.substring(fileName.lastIndexOf("."));
         if (!fileValidate.contains(idxFileName)) {
             throw new IllegalArgumentException("IMAGE_UPLOAD_ERROR");
@@ -97,8 +92,14 @@ public class S3Service  {
     }
 
     // DeleteObject를 통해 S3 파일 삭제
-    public void deleteFile(String fileName){
-        DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(bucket, fileName);
+    public void deleteFile(String fileName) {
+        String objectKey = parseObjectKeyFromUrl(fileName);
+
+        // 삭제
+        DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(bucket , objectKey);
         s3Client.deleteObject(deleteObjectRequest);
+    }
+    private String parseObjectKeyFromUrl(String objectUrl) {
+        return objectUrl.substring(objectUrl.lastIndexOf('/') + 1);
     }
 }
