@@ -134,13 +134,14 @@ public class ContestService {
     @Transactional
     public ResponseEntity createContest(Users users, String title, String contents,String style,BoardType type,List<String> hashtag, List<MultipartFile> files) throws IOException {
         try {
+            System.out.println(users.getProfileImg());
             Contest contest = Contest.builder()
                     .title(title)
                     .boardType(type)
                     .author(users.getName())
+                    .userImg(users.getProfileImg())
                     .contents(contents)
                     .style(style)
-
                     .users(users)
 
                     .build();

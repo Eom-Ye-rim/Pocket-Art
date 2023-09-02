@@ -21,6 +21,7 @@ public class ContestPageResponse {
     private Long id;
     private String title; //제목
     private String author; //작성자
+    private String userImg; //프로필 사진
     private int view_count; //조회수
     private int likecnt; // 좋아요 수
     private int comment_cnt; //댓글 수
@@ -31,6 +32,7 @@ public class ContestPageResponse {
         this.id=contest.getId();
         this.title = contest.getTitle();
         this.author = contest.getAuthor();
+        this.userImg=contest.getUserImg();
         this.view_count = contest.getViewCount();
         this.likecnt=contest.getLikecnt();
         this.comment_cnt = contest.getCommentList().size();

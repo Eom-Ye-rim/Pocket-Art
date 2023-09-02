@@ -27,6 +27,9 @@ public class Contest extends BaseTime {
     private String author; //작성자
 
     @Column
+    private String userImg; //작성자 프로필 사진
+
+    @Column
     private String contents; //내용
 
     @Column
@@ -65,9 +68,10 @@ public class Contest extends BaseTime {
 
 
     @Builder
-    public Contest(String title, String author, String contents, String category,BoardType boardType, String style,Users users) {
+    public Contest(String title, String author, String contents, String userImg,BoardType boardType, String style,Users users) {
         this.title = title;
         this.author=author;
+        this.userImg=userImg;
         this.contents=contents;
         this.boardType=boardType;
         this.style=style;

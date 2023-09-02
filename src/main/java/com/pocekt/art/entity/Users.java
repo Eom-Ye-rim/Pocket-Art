@@ -35,6 +35,9 @@ public class Users extends BaseTime implements UserDetails {
 
     @Column
     private String password;
+
+    @Column(columnDefinition = "VARCHAR(255) DEFAULT 'https://pocket-art-app.s3.ap-northeast-2.amazonaws.com/Group+7200.png'")
+    private String ProfileImg;
     @Enumerated(value = EnumType.STRING)
     private AuthProvider provider;
 

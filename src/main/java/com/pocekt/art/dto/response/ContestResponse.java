@@ -27,6 +27,7 @@ public class ContestResponse {
 
     private List<String> photoList;
     private List<String> tagList;
+    private String userImg;
 
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
@@ -39,6 +40,7 @@ public class ContestResponse {
         this.author = contest.getAuthor();
         this.title = contest.getTitle();
         this.contents = contest.getContents();
+        this.userImg=contest.getUserImg();
         this.viewCount = contest.getViewCount();
         this.createdDate = contest.getCreateDate();
         this.photoList = new ArrayList<>();
