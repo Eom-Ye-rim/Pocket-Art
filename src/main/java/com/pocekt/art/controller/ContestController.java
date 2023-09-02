@@ -72,16 +72,18 @@ public class ContestController {
 
 
     @PreAuthorize("hasAnyRole('USER')")
-    @PostMapping(value = "",consumes = {MediaType.APPLICATION_JSON_VALUE , MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = "",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity writeContest(@ApiIgnore @AuthUser Users users,
                                        @RequestPart ContestRequest contestRequest, @RequestPart(required = false) List<MultipartFile> files ) throws IOException {
 
+        System.out.println(contestRequest.getContents());
+        System.out.println(files.size());
 
         return contestService.createContest(users, contestRequest,files);
     }
 
     @PreAuthorize("hasAnyRole('USER')")
-    @PutMapping(value = "/{contestId}",consumes = {MediaType.APPLICATION_JSON_VALUE , MediaType.MULTIPART_FORM_DATA_VALUE} )
+    @PutMapping(value = "/{contestId}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE )
     public ResponseEntity updateContest(@ApiIgnore @AuthUser Users users, @PathVariable Long contestId,
                                       @RequestPart(value = "contestRequest") ContestRequest contestRequest,@RequestPart(required=false ) List<MultipartFile> files) throws IOException {
 
