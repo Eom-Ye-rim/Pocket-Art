@@ -36,7 +36,7 @@ public class Users extends BaseTime implements UserDetails {
     @Column
     private String password;
 
-    @Column(columnDefinition = "VARCHAR(255) DEFAULT 'https://pocket-art-app.s3.ap-northeast-2.amazonaws.com/Group+7200.png'")
+    @Column
     private String ProfileImg;
     @Enumerated(value = EnumType.STRING)
     private AuthProvider provider;
@@ -87,5 +87,9 @@ public class Users extends BaseTime implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+    @PrePersist
+    public void prePersist(){
+        this.ProfileImg = this.ProfileImg == null ? "https://pocket-art-app.s3.ap-northeast-2.amazonaws.com/Group+7200.png" : this.ProfileImg;
     }
 }
