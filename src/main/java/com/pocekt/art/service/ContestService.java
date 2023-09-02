@@ -132,14 +132,15 @@ public class ContestService {
 
     //글 생성
     @Transactional
-    public ResponseEntity createContest(Users users, ContestRequest contestRequest, List<MultipartFile> files) throws IOException {
+    public ResponseEntity createContest(Users users, String title, String contents,String style,BoardType type,List<String> hashtag, List<MultipartFile> files) throws IOException {
         try {
             Contest contest = Contest.builder()
-                    .title(contestRequest.getTitle())
-                    .boardType(contestRequest.getType())
+                    .title(title)
+                    .boardType(type)
                     .author(users.getName())
-                    .contents(contestRequest.getContents())
-                    .style(contestRequest.getStyle())
+                    .contents(contents)
+                    .style(style)
+
                     .users(users)
 
                     .build();
@@ -147,9 +148,9 @@ public class ContestService {
             Contest saveContest = contestRepository.save(contest);
             Users saveUsers = usersRepository.findById(users.getId()).get();
             saveUsers.getContestList().add(contest);
-            if (contestRequest.getHashtag()!=null) {
+            if (hashtag!=null) {
                 List<String> tagList = new ArrayList<>();
-                for (String tag : contestRequest.getHashtag()) {
+                for (String tag :hashtag) {
                     HashTag hashTag = new HashTag(tag, contest);
                     tagRepository.save(hashTag);
                     saveContest.addHashtag(hashTag);

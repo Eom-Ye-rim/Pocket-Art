@@ -73,14 +73,18 @@ public class ContestController {
 
 
     @PreAuthorize("hasAnyRole('USER')")
-    @PostMapping(value = "",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "")
     public ResponseEntity writeContest(@ApiIgnore @AuthUser Users users,
-                                       @RequestParam("contestRequestJSON") String contestRequestJSON, @RequestPart(required = false) List<MultipartFile> files ) throws IOException {
+                                       @RequestParam("title") String title,
+                                       @RequestParam("contents") String contents,
+                                       @RequestParam("style") String style,
+                                       @RequestParam("type") BoardType type,
+                                       @RequestParam(value = "hashtag",required = false) List<String> hashtag, @RequestPart(required = false) List<MultipartFile> files ) throws IOException {
 
 
 
-        ContestRequest contestRequest = new ObjectMapper().readValue(contestRequestJSON, ContestRequest.class);
-        return contestService.createContest(users, contestRequest,files);
+
+        return contestService.createContest(users, title,contents,style,type,hashtag,files);
     }
 
     @PreAuthorize("hasAnyRole('USER')")
