@@ -1,6 +1,7 @@
 package com.pocekt.art.controller;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pocekt.art.auth.AuthUser;
 import com.pocekt.art.dto.request.ContestRequest;
 import com.pocekt.art.dto.response.ContestPageResponse;
@@ -74,11 +75,11 @@ public class ContestController {
     @PreAuthorize("hasAnyRole('USER')")
     @PostMapping(value = "",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity writeContest(@ApiIgnore @AuthUser Users users,
-                                        @RequestPart ContestRequest contestRequest, @RequestPart(required = false) List<MultipartFile> files ) throws IOException {
-
-        System.out.println(contestRequest.getContents());
+                                       @RequestParam("contestRequestJSON") String contestRequestJSON, @RequestPart(required = false) List<MultipartFile> files ) throws IOException {
 
 
+
+        ContestRequest contestRequest = new ObjectMapper().readValue(contestRequestJSON, ContestRequest.class);
         return contestService.createContest(users, contestRequest,files);
     }
 
