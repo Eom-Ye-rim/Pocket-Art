@@ -147,13 +147,14 @@ public class ContestService {
             Contest saveContest = contestRepository.save(contest);
             Users saveUsers = usersRepository.findById(users.getId()).get();
             saveUsers.getContestList().add(contest);
-            ;
-            List<String> tagList = new ArrayList<>();
-            for (String tag : contestRequest.getHashtag()) {
-                HashTag hashTag = new HashTag(tag, contest);
-                tagRepository.save(hashTag);
-                saveContest.addHashtag(hashTag);
-                tagList.add(tag);
+            if (contestRequest.getHashtag()!=null) {
+                List<String> tagList = new ArrayList<>();
+                for (String tag : contestRequest.getHashtag()) {
+                    HashTag hashTag = new HashTag(tag, contest);
+                    tagRepository.save(hashTag);
+                    saveContest.addHashtag(hashTag);
+                    tagList.add(tag);
+                }
             }
             if (files!=null) {
 

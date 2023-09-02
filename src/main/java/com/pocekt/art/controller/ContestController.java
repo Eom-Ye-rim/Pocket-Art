@@ -72,12 +72,12 @@ public class ContestController {
 
 
     @PreAuthorize("hasAnyRole('USER')")
-    @PostMapping(value = "",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "")
     public ResponseEntity writeContest(@ApiIgnore @AuthUser Users users,
-                                       @RequestPart ContestRequest contestRequest, @RequestPart(required = false) List<MultipartFile> files ) throws IOException {
+                                       ContestRequest contestRequest, @RequestPart(required = false) List<MultipartFile> files ) throws IOException {
 
         System.out.println(contestRequest.getContents());
-        System.out.println(files.size());
+
 
         return contestService.createContest(users, contestRequest,files);
     }
