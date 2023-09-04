@@ -14,6 +14,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -43,17 +44,12 @@ public class ContestResponse {
         this.userImg=contest.getUserImg();
         this.viewCount = contest.getViewCount();
         this.createdDate = contest.getCreateDate();
-        this.photoList = new ArrayList<>();
-        List<Photo> photoList = contest.getPhotoList();
-        if (photoList != null) {
-            for (Photo photo : photoList) {
-                String fileUrl = photo.getFileUrl();
-                if (fileUrl != null) {
-                    this.photoList.add(fileUrl);
-                }
-            }
+        this.photoList = contest.getPhotoList()
+                .stream()
+                .map(photo -> photo.getFileUrl())
+                .filter(file -> file != null)
+                .collect(Collectors.toList());
 
-        }
         this.tagList = new ArrayList<>();
         List<HashTag> Hashtag = contest.getTagList();
         if (Hashtag != null) {

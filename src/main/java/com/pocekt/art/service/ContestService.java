@@ -159,8 +159,6 @@ public class ContestService {
                 }
             }
             if (files!=null) {
-
-
                 List<Photo> photoList = new ArrayList<>();
                 for (MultipartFile multipartFile : files) {
                     Photo photo = Photo.builder()
