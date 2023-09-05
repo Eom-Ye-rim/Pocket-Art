@@ -146,7 +146,7 @@ public class ContestService {
 
                     .build();
 
-            Contest saveContest = contestRepository.save(contest);
+
             Users saveUsers = usersRepository.findById(users.getId()).get();
             saveUsers.getContestList().add(contest);
             if (hashtag!=null) {
@@ -154,7 +154,7 @@ public class ContestService {
                 for (String tag :hashtag) {
                     HashTag hashTag = new HashTag(tag, contest);
                     tagRepository.save(hashTag);
-                    saveContest.addHashtag(hashTag);
+                    contest.addHashtag(hashTag);
                     tagList.add(tag);
                 }
             }
@@ -168,11 +168,14 @@ public class ContestService {
                             .contest(contest)
                             .build();
                     photoList.add(photo);
-                }
-                photoRepository.saveAll(photoList);
-            }
 
-            return response.success(new ContestResponse(contest), "컨테스트 글 등록 성공", HttpStatus.OK);
+                }
+
+                photoRepository.saveAll(photoList);
+                contest.setPhotoList(photoList);
+            }
+            Contest saveContest = contestRepository.save(contest);
+            return response.success(new ContestResponse(saveContest), "컨테스트 글 등록 성공", HttpStatus.OK);
         } catch (Exception e) {
             return response.fail(e, "컨테스트 글 등록 실패", HttpStatus.BAD_REQUEST);
         }

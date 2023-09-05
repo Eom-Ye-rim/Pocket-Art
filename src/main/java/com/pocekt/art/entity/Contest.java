@@ -85,6 +85,11 @@ public class Contest extends BaseTime {
         tagList.add(hashTag);
         hashTag.setContest(this);
     }
+
+    public void addPhoto(Photo photo){
+        photoList.add(photo);
+        photo.setContest(this);
+    }
 }
 
 /*

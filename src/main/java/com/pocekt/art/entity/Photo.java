@@ -10,6 +10,7 @@ import java.util.UUID;
 @Entity
 @Getter
 @Builder
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Photo {
@@ -36,5 +37,6 @@ public class Photo {
         this.fileUrl=fileUrl;
         this.contest=contest;
     }
+
 
 }
