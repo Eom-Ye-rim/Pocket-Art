@@ -15,10 +15,11 @@ import ai.djl.translate.TranslateException;
 import ai.djl.translate.Translator;
 import ai.djl.translate.TranslatorContext;
 import com.pocekt.art.dto.request.TransformedImageDTO;
+import com.pocekt.art.service.S3Service;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -31,20 +32,61 @@ import java.awt.image.DataBufferInt;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/image")
 
 public class ImageController {
 
-    @GetMapping("")
-    public static ResponseEntity<TransformedImageDTO> main(String[] args) {
-        String modelPath = "/home/ubuntu/23_HI053/models/gogh_08.pt";
-        String imagePath = "/home/ubuntu/23_HI053/models/115.png";
+    private final S3Service s3Service;
+    @PostMapping("")
+    public ResponseEntity<TransformedImageDTO> goghmodel(@RequestParam String modelname, @RequestPart MultipartFile file) {
+        String modelPath="";
+        if (modelname.equals("gogh")){
+            modelPath = "/home/ubuntu/23_HI053/models/gogh_08.pt";
+
+        }
+        if (modelname.equals("monet")){
+            modelPath = "/home/ubuntu/23_HI053/models/monet_08_23.pt";
+        }
+        if (modelname.equals("edgar")){
+            modelPath = "/home/ubuntu/23_HI053/models/edgar_09_02.pt";
+        }
+        if (modelname.equals("east")){
+            modelPath = "/home/ubuntu/23_HI053/models/east_08_23.pt";
+        }
+        if (modelname.equals("cezanne")){
+            modelPath = "/home/ubuntu/23_HI053/models/cezanne_08_23.pt";
+        }
+
+        String imagePath = "";
+
+        if (!file.isEmpty()) {
+            try {
+                // Define the directory where you want to save the uploaded file
+                String uploadDirectory = "/home/ubuntu/23_HI053/models/";
+                String fileName = file.getOriginalFilename();
+                Path filePath = Path.of(uploadDirectory, fileName);
+
+                // Save the uploaded file to the temporary directory
+                Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+                // Set imagePath to the path of the saved file
+                imagePath = filePath.toString();
+            } catch (IOException e) {
+                e.printStackTrace();
+                // Handle the exception appropriately
+            }
+        } else {
+            // Handle the case where no file was uploaded
+        }
         int targetWidth = 256;
         int targetHeight = 256;
         //ImageIO.setUseCache(false);
@@ -107,42 +149,13 @@ public class ImageController {
 
                 return ResponseEntity.ok(transformedImageDTO);
 
-
-                /*
-                BufferedImage resizedImage2 = resizeImage(image, targetWidth, targetHeight);
-              //모델 예측
-                float[] result2 = predictor.predict(resizedImage2);
-
-                //normalize 역과정
-                for (int i = 0; i < result.length; i++) {
-                   result2[i] *= 0.5;
-                   result2[i] += 0.5;
-                   result2[i] *= 255;
-                }
-
-                BufferedImage output2 = getImageFromFloatArray(result2, targetWidth, targetHeight);
-
-                */
-
-
-                //시각화
-//                JFrame frame = new JFrame();
-//                frame.getContentPane().setLayout(new FlowLayout());
-//                //frame.getContentPane().add(new JLabel(new ImageIcon(image)));
-//                frame.getContentPane().add(new JLabel(new ImageIcon(t_image)));
-//                frame.getContentPane().add(new JLabel(new ImageIcon(resizedImage)));
-//                frame.getContentPane().add(new JLabel(new ImageIcon(output)));
-//                //frame.getContentPane().add(new JLabel(new ImageIcon(output2)));
-//                frame.pack();
-//                frame.setVisible(true);
-
-
             }
         } catch (IOException | TranslateException | ModelNotFoundException | MalformedModelException e) {
             e.printStackTrace();
         }
         return null;
     }
+
 
 
     private static BufferedImage getImageFromFloatArray(float[] data, int w, int h) {
