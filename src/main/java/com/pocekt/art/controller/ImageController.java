@@ -22,14 +22,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.awt.image.WritableRaster;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -61,6 +60,7 @@ public class ImageController {
         }
         if (modelname.equals("east")){
             modelPath = "/home/ubuntu/23_HI053/models/east_08_23.pt";
+//            modelPath="/Users/eom-yelim/23_HI053/models/east_08_23.pt";
         }
         if (modelname.equals("cezanne")){
             modelPath = "/home/ubuntu/23_HI053/models/cezanne_08_23.pt";
@@ -72,6 +72,7 @@ public class ImageController {
             try {
                 // Define the directory where you want to save the uploaded file
                 String uploadDirectory = "/home/ubuntu/23_HI053/models/";
+//                String uploadDirectory ="/Users/eom-yelim/23_HI053/models/";
                 String fileName = file.getOriginalFilename();
                 Path filePath = Path.of(uploadDirectory, fileName);
 
@@ -141,11 +142,13 @@ public class ImageController {
 
                 //형 변환
                 BufferedImage output = getImageFromFloatArray(result, targetWidth, targetHeight);
-                System.out.println("test"+output);
+                byte[] imageBytes = serializeImage(output);
+
+
                 TransformedImageDTO transformedImageDTO = new TransformedImageDTO();
                 transformedImageDTO.setWidth(targetWidth);
                 transformedImageDTO.setHeight(targetHeight);
-                transformedImageDTO.setData(result);
+                transformedImageDTO.setData(imageBytes);
 
                 return ResponseEntity.ok(transformedImageDTO);
 
@@ -155,15 +158,32 @@ public class ImageController {
         }
         return null;
     }
+    private static byte[] serializeImage(BufferedImage image) {
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            ImageIO.write(image, "png", outputStream); // Save as PNG (or other format)
+            return outputStream.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
+    private static BufferedImage deserializeImage(byte[] imageBytes) {
+        try (ByteArrayInputStream inputStream = new ByteArrayInputStream(imageBytes)) {
+            return ImageIO.read(inputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 
     private static BufferedImage getImageFromFloatArray(float[] data, int w, int h) {
         BufferedImage img = new BufferedImage(w, h, BufferedImage.TYPE_INT_BGR);
-       System.out.println("Image pixel array size: "
-                       + ((DataBufferInt) img.getRaster().getDataBuffer())
-                               .getData().length);
-       System.out.println("Datasize: " + data.length);
+        System.out.println("Image pixel array size: "
+                + ((DataBufferInt) img.getRaster().getDataBuffer())
+                .getData().length);
+        System.out.println("Datasize: " + data.length);
         WritableRaster raster = img.getRaster();
         raster.setPixels(0, 0, w, h, data);
         return img;
