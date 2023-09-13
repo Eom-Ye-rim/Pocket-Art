@@ -59,8 +59,8 @@ public class ImageController {
             modelPath = "/home/ubuntu/23_HI053/models/edgar_09_02.pt";
         }
         if (modelname.equals("east")){
-            modelPath = "/home/ubuntu/23_HI053/models/east_08_23.pt";
-//            modelPath="/Users/eom-yelim/23_HI053/models/east_08_23.pt";
+//            modelPath = "/home/ubuntu/23_HI053/models/east_08_23.pt";
+            modelPath="/Users/eom-yelim/23_HI053/models/east_08_23.pt";
         }
         if (modelname.equals("cezanne")){
             modelPath = "/home/ubuntu/23_HI053/models/cezanne_08_23.pt";
@@ -149,12 +149,22 @@ public class ImageController {
 
                 String outputPath = Paths.get(uploadDirectory2, file.getOriginalFilename()).toString();
                 byte[] imageBytes = serializeImage(output);
+                String s3DestinationPath = file.getOriginalFilename();
+                String path =s3Service.upload(imageBytes, s3DestinationPath);
+                System.out.println(path);
+
                 saveImageAsPng(output, outputPath);
+
+
+                // Upload the generated image to S3
+
+
 
                 TransformedImageDTO transformedImageDTO = new TransformedImageDTO();
                 transformedImageDTO.setWidth(targetWidth);
                 transformedImageDTO.setHeight(targetHeight);
                 transformedImageDTO.setData(imageBytes);
+                transformedImageDTO.setUrl(path);
 
                 return ResponseEntity.ok(transformedImageDTO);
 
@@ -202,6 +212,7 @@ public class ImageController {
     private static void saveImageAsPng(BufferedImage image, String filePath) {
         try {
             File output = new File(filePath);
+
             ImageIO.write(image, "png", output);
         } catch (IOException e) {
             e.printStackTrace();

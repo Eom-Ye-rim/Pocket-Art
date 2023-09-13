@@ -6,26 +6,25 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 import java.util.UUID;
 
 
 @Service
 @RequiredArgsConstructor
-public class S3Service  {
+public class S3Service {
 
     private final AmazonS3 s3Client;
 
@@ -58,7 +57,7 @@ public class S3Service  {
         objectMetadata.setContentType(file.getContentType());
 
         try (InputStream inputStream = file.getInputStream()) {
-            s3Client.putObject(new PutObjectRequest(bucket , fileName, inputStream, objectMetadata)
+            s3Client.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
             imageUrl = s3Client.getUrl(bucket, fileName).toString();
         } catch (IOException e) {
@@ -66,6 +65,7 @@ public class S3Service  {
         }
         return imageUrl;
     }
+
     // 이미지파일명 중복 방지
     private String createFileName(String fileName) {
         return UUID.randomUUID().toString().concat(getFileExtension(fileName));
@@ -96,10 +96,44 @@ public class S3Service  {
         String objectKey = parseObjectKeyFromUrl(fileName);
 
         // 삭제
-        DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(bucket , objectKey);
+        DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(bucket, objectKey);
         s3Client.deleteObject(deleteObjectRequest);
     }
+
     private String parseObjectKeyFromUrl(String objectUrl) {
         return objectUrl.substring(objectUrl.lastIndexOf('/') + 1);
     }
+
+
+    public String upload(byte[] imageBytes, String s3DestinationPath) {
+        try {
+            // Create an ObjectMetadata to provide content type information
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentLength(imageBytes.length);
+            metadata.setContentType("image/png"); // Set the appropriate content type
+
+            // Upload the image bytes to S3
+            s3Client.putObject(new PutObjectRequest(
+                    bucket, // Replace with your S3 bucket name
+                    s3DestinationPath,    // The S3 destination path (including the object key)
+                    new ByteArrayInputStream(imageBytes), // Provide the image bytes as input stream
+                    metadata));
+
+            GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(bucket, s3DestinationPath);
+            Date expiration = new Date(System.currentTimeMillis() + (7 * 24 * 60 * 60 * 1000)); // Set the expiration time for the URL (e.g., 7 days)
+            generatePresignedUrlRequest.setExpiration(expiration);
+
+            URL url = s3Client.generatePresignedUrl(generatePresignedUrlRequest);
+
+            // Optionally, you can log or handle the URL here
+            return url.toString();
+            // Optionally, you can log or handle a successful upload here
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle the exception appropriately (e.g., log the error)
+        }
+        return s3DestinationPath;
+    }
 }
+
+

@@ -26,6 +26,7 @@ public class TransformedImageDTO {
     private int width;
     private int height;
     private byte[] data; // Store the BufferedImage directly
+    private String url;
 
     // Constructors, getters, and setters
 
