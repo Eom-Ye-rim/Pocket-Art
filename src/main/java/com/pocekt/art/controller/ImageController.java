@@ -59,8 +59,8 @@ public class ImageController {
             modelPath = "/home/ubuntu/23_HI053/models/edgar_09_02.pt";
         }
         if (modelname.equals("east")){
-//            modelPath = "/home/ubuntu/23_HI053/models/east_08_23.pt";
-            modelPath="/Users/eom-yelim/23_HI053/models/east_08_23.pt";
+            modelPath = "/home/ubuntu/23_HI053/models/east_08_23.pt";
+//            modelPath="/Users/eom-yelim/23_HI053/models/east_08_23.pt";
         }
         if (modelname.equals("cezanne")){
             modelPath = "/home/ubuntu/23_HI053/models/cezanne_08_23.pt";
@@ -72,7 +72,7 @@ public class ImageController {
         if (!file.isEmpty()) {
             try {
                 // Define the directory where you want to save the uploaded file
-                String uploadDirectory = "/Users/eom-yelim/23_HI053/models/";
+                String uploadDirectory = "/home/ubuntu/23_HI053/models/";
                 String convertedImageFileName = file.getOriginalFilename(); // Use the original filename for the converted image
 
                 String convertedImagePath = Paths.get(uploadDirectory, convertedImageFileName).toString();
@@ -141,11 +141,8 @@ public class ImageController {
                     result[i] *= 255;
                 }
 
-
-
-
                 //형 변환
-                String uploadDirectory2= "/Users/eom-yelim/23_HI053/models/";
+                String uploadDirectory2= "/home/ubuntu/23_HI053/models/";
                 BufferedImage output = getImageFromFloatArray(result, targetWidth, targetHeight);
 
 
