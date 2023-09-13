@@ -59,8 +59,8 @@ public class ImageController {
             modelPath = "/home/ubuntu/23_HI053/models/edgar_09_02.pt";
         }
         if (modelname.equals("east")){
-            modelPath = "/home/ubuntu/23_HI053/models/east_08_23.pt";
-//            modelPath="/Users/eom-yelim/23_HI053/models/east_08_23.pt";
+//            modelPath = "/home/ubuntu/23_HI053/models/east_08_23.pt";
+            modelPath="/Users/eom-yelim/23_HI053/models/east_08_23.pt";
         }
         if (modelname.equals("cezanne")){
             modelPath = "/home/ubuntu/23_HI053/models/cezanne_08_23.pt";
@@ -68,10 +68,14 @@ public class ImageController {
 
         String imagePath = "";
 
+
         if (!file.isEmpty()) {
             try {
                 // Define the directory where you want to save the uploaded file
-                String uploadDirectory = "/home/ubuntu/23_HI053/models/";
+                String uploadDirectory = "/Users/eom-yelim/23_HI053/models/";
+                String convertedImageFileName = file.getOriginalFilename(); // Use the original filename for the converted image
+
+                String convertedImagePath = Paths.get(uploadDirectory, convertedImageFileName).toString();
 //                String uploadDirectory ="/Users/eom-yelim/23_HI053/models/";
                 String fileName = file.getOriginalFilename();
                 Path filePath = Path.of(uploadDirectory, fileName);
@@ -138,12 +142,17 @@ public class ImageController {
                 }
 
 
-                System.out.println(Arrays.toString(result));
+
 
                 //형 변환
+                String uploadDirectory2= "/Users/eom-yelim/23_HI053/models/";
                 BufferedImage output = getImageFromFloatArray(result, targetWidth, targetHeight);
-                byte[] imageBytes = serializeImage(output);
 
+
+
+                String outputPath = Paths.get(uploadDirectory2, file.getOriginalFilename()).toString();
+                byte[] imageBytes = serializeImage(output);
+                saveImageAsPng(output, outputPath);
 
                 TransformedImageDTO transformedImageDTO = new TransformedImageDTO();
                 transformedImageDTO.setWidth(targetWidth);
@@ -193,6 +202,15 @@ public class ImageController {
         return ImageIO.read(Paths.get(imagePath).toFile());
     }
 
+    private static void saveImageAsPng(BufferedImage image, String filePath) {
+        try {
+            File output = new File(filePath);
+            ImageIO.write(image, "png", output);
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Handle the exception appropriately
+        }
+    }
 
 
 
