@@ -59,8 +59,8 @@ public class ImageController {
             modelPath = "/home/ubuntu/23_HI053/models/edgar_09_02.pt";
         }
         if (modelname.equals("east")){
-//            modelPath = "/home/ubuntu/23_HI053/models/east_08_23.pt";
-            modelPath="/Users/eom-yelim/23_HI053/models/east_08_23.pt";
+            modelPath = "/home/ubuntu/23_HI053/models/east_08_23.pt";
+//            modelPath="/Users/eom-yelim/23_HI053/models/east_08_23.pt";
         }
         if (modelname.equals("cezanne")){
             modelPath = "/home/ubuntu/23_HI053/models/cezanne_08_23.pt";
