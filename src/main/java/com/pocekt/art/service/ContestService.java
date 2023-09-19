@@ -143,9 +143,7 @@ public class ContestService {
                     .contents(contents)
                     .style(style)
                     .users(users)
-
                     .build();
-
 
             Users saveUsers = usersRepository.findById(users.getId()).get();
             saveUsers.getContestList().add(contest);

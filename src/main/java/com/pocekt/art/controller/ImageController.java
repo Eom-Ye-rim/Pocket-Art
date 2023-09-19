@@ -151,14 +151,14 @@ public class ImageController {
                 byte[] imageBytes = serializeImage(output);
                 String s3DestinationPath = file.getOriginalFilename();
                 String path =s3Service.upload(imageBytes, s3DestinationPath);
-                System.out.println(path);
+
 
                 saveImageAsPng(output, outputPath);
 
 
                 // Upload the generated image to S3
 
-
+                System.out.println(imagePath);
 
                 TransformedImageDTO transformedImageDTO = new TransformedImageDTO();
                 transformedImageDTO.setWidth(targetWidth);

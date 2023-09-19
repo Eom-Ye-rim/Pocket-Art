@@ -20,7 +20,7 @@ import java.util.List;
         for (int i = 0; i < 4; i++) {
             CreateImageRequest createImageRequest = CreateImageRequest.builder()
                     .prompt(prompt)
-                    .size("512x512") //size 조정
+                    .size("256x256") //size 조정
                     .n(1) // 개수 조정
                     .build();
 
