@@ -159,6 +159,7 @@ public class ImageController {
                 // Upload the generated image to S3
 
                 System.out.println(imagePath);
+                System.out.println(output);
 
                 TransformedImageDTO transformedImageDTO = new TransformedImageDTO();
                 transformedImageDTO.setWidth(targetWidth);
