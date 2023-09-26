@@ -92,6 +92,11 @@ dependencies {
 	implementation 'io.springfox:springfox-boot-starter:3.0.0'
 	testImplementation 'junit:junit:4.13.2'
 
+	implementation 'org.openpnp:opencv:3.4.2-0'
+
+	implementation group: 'org.bytedeco', name: 'javacv', version: '1.5.6' // 현재 버전 확인
+
+
 }
 tasks.named('test') {
 	useJUnitPlatform()
