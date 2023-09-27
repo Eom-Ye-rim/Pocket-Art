@@ -15,55 +15,48 @@ import org.opencv.imgproc.Imgproc;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 @RestController
 @RequestMapping("/api/v1/sketch")
 public class SketchController {
 
     public static void main(String[] args) {
-        // Load OpenCV
+        // OpenCV 로드
         OpenCV.loadLocally();
-        System.out.println("OpenCV loaded");
-
-        // Call your image processing method
-        showCannyNSobelEdgeWithLenna();
+        System.out.println("OpenCV 로드됨");
     }
 
     @PostMapping("")
-    public static void showCannyNSobelEdgeWithLenna() {
+    public void processImage() {
         try {
-            OpenCV.loadLocally();
-            System.out.println("OpenCV loaded");
-
-            // Call your image processing method
-            showCannyNSobelEdgeWithLenna();
             double threshold = 150;
             double threshold1 = threshold;
             double threshold2 = threshold * 2.5;
 
             String imagePath = "/home/ubuntu/23_HI053/models/castle-7766794_1920.jpg";
-            System.out.println("Image file : " + imagePath);
+            System.out.println("이미지 파일: " + imagePath);
 
-            // Check if the image file exists
+            // 이미지 파일이 존재하는지 확인
             File imageFile = new File(imagePath);
             if (imageFile.exists()) {
-                System.out.println("Image file exists: " + imagePath);
-                // Load the image only if it exists
+                System.out.println("이미지 파일이 존재합니다: " + imagePath);
+                // 이미지 파일이 존재할 경우 이미지 로드
                 BufferedImage image = loadImage(imagePath);
                 Mat M_image = img2Mat(image);
 
-                // GrayScale
+                // 그레이스케일
                 Imgproc.cvtColor(M_image, M_image, Imgproc.COLOR_RGB2GRAY);
 
-                // Start Canny Edge
+                // Canny 에지 검출 시작
                 Mat canny_img = new Mat();
                 Imgproc.Canny(M_image, canny_img, threshold1, threshold2, 3, false);
-                // End Canny Edge
+                // Canny 에지 검출 끝
 
-                // Continue with your image processing logic
+                // 이미지 처리 로직을 계속하세요.
             } else {
-                // Handle the case where the image file does not exist
-                System.out.println("Image file does not exist: " + imagePath);
-                // You can throw an exception or log an error message, or take appropriate action.
+                // 이미지 파일이 존재하지 않는 경우 처리
+                System.out.println("이미지 파일이 존재하지 않습니다: " + imagePath);
+                // 예외를 throw하거나 오류 메시지를 기록하거나 적절한 조치를 취할 수 있습니다.
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -81,3 +74,4 @@ public class SketchController {
         return mat;
     }
 }
+
