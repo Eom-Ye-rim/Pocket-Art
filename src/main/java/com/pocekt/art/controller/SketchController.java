@@ -5,11 +5,15 @@ package com.pocekt.art.controller;
 
 
 
+import com.pocekt.art.dto.request.TransformedImageDTO;
 import com.pocekt.art.dto.request.UserRequestDto;
+import com.pocekt.art.dto.response.Response;
+import lombok.RequiredArgsConstructor;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
@@ -28,10 +32,11 @@ import java.nio.file.Paths;
 
 @RestController
 @RequestMapping("/api/v1/sketch")
+@RequiredArgsConstructor
 class SketchController {
+    private final Response response;
     @PostMapping("")
-
-    public static String sketch(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> sketch(@RequestParam("file") MultipartFile file) {
         File outputImageFile = null;
         try {
             // Load the input image
@@ -96,7 +101,9 @@ class SketchController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return outputImageFile.getPath();
+        return response.success(outputImageFile.getPath(), "스케치 변환 성공", HttpStatus.OK);
+
+
     }
 }
 

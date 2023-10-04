@@ -14,9 +14,15 @@ import ai.djl.repository.zoo.ZooModel;
 import ai.djl.translate.TranslateException;
 import ai.djl.translate.Translator;
 import ai.djl.translate.TranslatorContext;
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.imaging.ImageProcessingException;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.MetadataException;
+import com.drew.metadata.exif.ExifIFD0Directory;
 import com.pocekt.art.dto.request.TransformedImageDTO;
 import com.pocekt.art.service.S3Service;
 import lombok.RequiredArgsConstructor;
+import org.imgscalr.Scalr;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,10 +33,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.awt.image.WritableRaster;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -170,7 +173,8 @@ public class ImageController {
                 return ResponseEntity.ok(transformedImageDTO);
 
             }
-        } catch (IOException | TranslateException | ModelNotFoundException | MalformedModelException e) {
+        } catch (IOException | TranslateException | ModelNotFoundException | MalformedModelException |
+                 ImageProcessingException | MetadataException e) {
             e.printStackTrace();
         }
         return null;
@@ -206,8 +210,39 @@ public class ImageController {
         return img;
     }
 
-    private static BufferedImage loadImage(String imagePath) throws IOException {
-        return ImageIO.read(Paths.get(imagePath).toFile());
+    private static BufferedImage loadImage(String imagePath) throws IOException, ImageProcessingException, MetadataException {
+        BufferedImage bufferedImage = ImageIO.read(Paths.get(imagePath).toFile());
+
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        ImageIO.write(bufferedImage, "jpeg", os);
+        InputStream is = new ByteArrayInputStream(os.toByteArray());
+
+        Metadata metadata = ImageMetadataReader.readMetadata(Paths.get(imagePath).toFile());
+
+        ExifIFD0Directory exifIFD0 =metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
+        //System.out.println(exifIFD0);
+
+        int orientation = 1;
+
+        if(exifIFD0 != null && exifIFD0.containsTag(ExifIFD0Directory.TAG_ORIENTATION))  {
+            orientation = exifIFD0.getInt(ExifIFD0Directory.TAG_ORIENTATION);
+        }
+
+        //System.out.println(orientation);
+
+        BufferedImage rotatedImage;
+
+        if(orientation == 6 ) {
+            rotatedImage = Scalr.rotate(bufferedImage, Scalr.Rotation.CW_90);
+        } else if (orientation == 3) {
+            rotatedImage = Scalr.rotate(bufferedImage, Scalr.Rotation.CW_180);
+        } else if(orientation == 8) {
+            rotatedImage = Scalr.rotate(bufferedImage, Scalr.Rotation.CW_270);
+        } else {
+            rotatedImage = bufferedImage;
+        }
+
+        return rotatedImage;
     }
 
     private static void saveImageAsPng(BufferedImage image, String filePath) {

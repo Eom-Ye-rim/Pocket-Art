@@ -97,7 +97,8 @@ dependencies {
 
 	implementation 'com.google.cloud:google-cloud-dialogflow'
 
-
+	implementation 'org.imgscalr:imgscalr-lib:4.2'
+	implementation 'com.drewnoakes:metadata-extractor:2.18.0'
 
 	implementation 'com.google.cloud:google-cloud-storage:1.106.0'
 	implementation group: 'org.bytedeco', name: 'javacv', version: '1.5.6' // 현재 버전 확인
