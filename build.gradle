@@ -92,9 +92,19 @@ dependencies {
 	implementation 'io.springfox:springfox-boot-starter:3.0.0'
 	testImplementation 'junit:junit:4.13.2'
 
-	implementation 'org.openpnp:opencv:3.4.2-0'
+	implementation 'com.google.http-client:google-http-client-jackson2:1.39.0'
+	implementation platform('com.google.cloud:libraries-bom:25.4.0')
 
+	implementation 'com.google.cloud:google-cloud-dialogflow'
+
+
+
+	implementation 'com.google.cloud:google-cloud-storage:1.106.0'
 	implementation group: 'org.bytedeco', name: 'javacv', version: '1.5.6' // 현재 버전 확인
+
+	implementation group: 'com.google.apis', name: 'google-api-services-dialogflow', version: 'v2-rev124-1.25.0'
+	// 다른 의존성들을 추가할 수 있습니다.
+
 
 
 }

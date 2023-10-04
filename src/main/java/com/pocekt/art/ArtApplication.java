@@ -1,5 +1,6 @@
 package com.pocekt.art;
 
+import org.opencv.core.Core;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -9,6 +10,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 public class ArtApplication {
 
 	public static void main(String[] args) {
+
+
+
 		SpringApplication.run(ArtApplication.class, args);
 	}
 

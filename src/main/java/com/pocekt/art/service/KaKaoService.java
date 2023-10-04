@@ -54,6 +54,7 @@ public class KaKaoService {
                 kakaoTokenRequest, // 요청할 때 보낼 데이터
                 String.class
         );
+
         System.out.println("응답" + response.getBody());
 
         ObjectMapper objectMapper = new ObjectMapper();
