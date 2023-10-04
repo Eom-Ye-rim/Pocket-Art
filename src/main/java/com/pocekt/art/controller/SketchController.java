@@ -48,9 +48,6 @@ class SketchController {
     public ResponseEntity<?> sketch(@RequestParam("file") MultipartFile file) throws IOException {
         File outputImageFile = null;
         String test="";
-
-
-
             try {
 
             // Convert MultipartFile to BufferedImage
@@ -68,51 +65,63 @@ class SketchController {
                 }
             }
 
-            // Create a new image to store the edges
+
             BufferedImage edgeImage = new BufferedImage(inputImage.getWidth(), inputImage.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
+// Apply the Sobel operator for edge detection
+                int[][] sobelX = {{-1, 0, 1}, {-2, 0, 2}, {-1, 0, 1}};
+                int[][] sobelY = {{-1, -2, -1}, {0, 0, 0}, {1, 2, 1}};
 
-            // Apply the Sobel operator for edge detection
-            int[][] sobelX = {{-1, 0, 1}, {-2, 0, 2}, {-1, 0, 1}};
-            int[][] sobelY = {{-1, -2, -1}, {0, 0, 0}, {1, 2, 1}};
+                for (int x = 1; x < inputImage.getWidth() - 1; x++) {
+                    for (int y = 1; y < inputImage.getHeight() - 1; y++) {
+                        int gradientX = 0;
+                        int gradientY = 0;
 
-            for (int x = 1; x < inputImage.getWidth() - 1; x++) {
-                for (int y = 1; y < inputImage.getHeight() - 1; y++) {
-                    int gradientX = 0;
-                    int gradientY = 0;
-
-                    for (int i = -1; i <= 1; i++) {
-                        for (int j = -1; j <= 1; j++) {
-                            int pixelValue = new Color(grayImage.getRGB(x + i, y + j)).getRed();
-                            gradientX += sobelX[i + 1][j + 1] * pixelValue;
-                            gradientY += sobelY[i + 1][j + 1] * pixelValue;
+                        for (int i = -1; i <= 1; i++) {
+                            for (int j = -1; j <= 1; j++) {
+                                int pixelValue = new Color(grayImage.getRGB(x + i, y + j)).getRed();
+                                gradientX += sobelX[i + 1][j + 1] * pixelValue;
+                                gradientY += sobelY[i + 1][j + 1] * pixelValue;
+                            }
                         }
+
+                        int gradientMagnitude = (int) Math.sqrt(gradientX * gradientX + gradientY * gradientY);
+
+                        // Clamp the gradient magnitude to the valid range (0 to 255)
+                        gradientMagnitude = Math.max(0, Math.min(255, gradientMagnitude));
+
+                        // Set the pixel color using the clamped gradient magnitude
+                        int invertedColor = new Color(gradientMagnitude, gradientMagnitude, gradientMagnitude).getRGB();
+                        edgeImage.setRGB(x, y, invertedColor);
                     }
-
-                    int gradientMagnitude = (int) Math.sqrt(gradientX * gradientX + gradientY * gradientY);
-
-                    // Clamp the gradient magnitude to the valid range (0 to 255)
-                    gradientMagnitude = Math.max(0, Math.min(255, gradientMagnitude));
-
-                    // Separate the RGB channels
-                    int redChannel = gradientMagnitude;
-                    int greenChannel = gradientMagnitude;
-                    int blueChannel = gradientMagnitude;
-
-                    // Set the pixel color using the clamped color channels
-                    edgeImage.setRGB(x, y, new Color(redChannel, greenChannel, blueChannel).getRGB());
                 }
-            }
 
 
-            // S3 업로드
-            outputImageFile = new File("/home/ubuntu/23_HI053/sketch/"+file.getOriginalFilename());
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                ImageIO.write(edgeImage, "jpg", byteArrayOutputStream);
+                outputImageFile = new File("/home/ubuntu/23_HI053/sketch/"+file.getOriginalFilename());
+
+// Create a new image with white background
+                BufferedImage invertedImage = new BufferedImage(inputImage.getWidth(), inputImage.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
+
+                for (int x = 0; x < inputImage.getWidth(); x++) {
+                    for (int y = 0; y < inputImage.getHeight(); y++) {
+                        // Get the gradient magnitude
+                        int gradientMagnitude = new Color(edgeImage.getRGB(x, y)).getRed();
+
+                        // Invert the gradient magnitude (0 to 255) to represent black lines on white background
+                        gradientMagnitude = 255 - gradientMagnitude;
+
+                        // Set the pixel color using the inverted gradient magnitude
+                        int invertedColor = new Color(gradientMagnitude, gradientMagnitude, gradientMagnitude).getRGB();
+                        invertedImage.setRGB(x, y, invertedColor);
+                    }
+                }
+
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                ImageIO.write(invertedImage, "jpg", byteArrayOutputStream);
                 byte[] imageBytes = byteArrayOutputStream.toByteArray();
 
-                String s3DestinationPath = "sketch/"+outputImageFile.getName(); // 원하는 S3 저장 경로와 파일 이름 지정
+                String s3DestinationPath = "sketch/"+outputImageFile.getName();
                 test = s3Service.upload(imageBytes, s3DestinationPath);
-            System.out.println("Edge detection completed and saved as edge_image.jpg");
+
            
         } catch (Exception e) {
             e.printStackTrace();
