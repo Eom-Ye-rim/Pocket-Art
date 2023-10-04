@@ -5,9 +5,13 @@ package com.pocekt.art.controller;
 
 
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.pocekt.art.dto.request.TransformedImageDTO;
 import com.pocekt.art.dto.request.UserRequestDto;
 import com.pocekt.art.dto.response.Response;
+import com.pocekt.art.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -35,9 +39,11 @@ import java.nio.file.Paths;
 @RequiredArgsConstructor
 class SketchController {
     private final Response response;
+    private final S3Service s3Service;
     @PostMapping("")
     public ResponseEntity<?> sketch(@RequestParam("file") MultipartFile file) {
         File outputImageFile = null;
+        String test="";
         try {
             // Load the input image
 
@@ -91,8 +97,13 @@ class SketchController {
                 }
             }
 
-            // Save the edge-detected image
-            outputImageFile = new File("/home/ubuntu/23_HI053/sketch/"+file.getOriginalFilename());
+
+            // S3 업로드
+            outputImageFile = new File("/Users/eom-yelim/23_HI053/sketch/"+file.getOriginalFilename());
+            test= s3Service.Sketchupload(outputImageFile);
+
+
+
             System.out.println(outputImageFile.getName());
             System.out.println(outputImageFile.getPath());
             ImageIO.write(edgeImage, "jpg", outputImageFile);
@@ -101,7 +112,7 @@ class SketchController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return response.success(outputImageFile.getPath(), "스케치 변환 성공", HttpStatus.OK);
+        return response.success(test, "스케치 변환 성공", HttpStatus.OK);
 
 
     }

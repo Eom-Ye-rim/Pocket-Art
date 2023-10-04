@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -48,7 +49,18 @@ public class S3Service {
                 .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
                 .build();
     }
+    public String Sketchupload(File file) {
+        String imageUrl = "";
+        String key = "sketch/" + file.getName();
 
+        // 파일 객체를 직접 전달
+        s3Client.putObject(new PutObjectRequest(bucket, key, file));
+
+        // 업로드된 객체의 공개 URL을 가져오기
+        imageUrl = s3Client.getUrl(bucket, key).toString();
+
+        return imageUrl;
+    }
     public String upload(MultipartFile file) {
         String imageUrl = "";
         String fileName = createFileName(file.getOriginalFilename());
