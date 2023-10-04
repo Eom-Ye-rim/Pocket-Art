@@ -99,7 +99,7 @@ class SketchController {
 
 
             // S3 업로드
-            outputImageFile = new File("/Users/eom-yelim/23_HI053/sketch/"+file.getOriginalFilename());
+            outputImageFile = new File("/home/ubuntu/23_HI053/sketch/"+file.getOriginalFilename());
             test= s3Service.Sketchupload(outputImageFile);
 
 
