@@ -51,13 +51,14 @@ public class S3Service {
     }
     public String Sketchupload(File file) {
         String imageUrl = "";
-        String key = "sketch/" + file.getName();
+        String key = "sketch/" + file;
 
         // 파일 객체를 직접 전달
         s3Client.putObject(new PutObjectRequest(bucket, key, file));
 
         // 업로드된 객체의 공개 URL을 가져오기
         imageUrl = s3Client.getUrl(bucket, key).toString();
+        System.out.println("imageUrl"+imageUrl);
 
         return imageUrl;
     }

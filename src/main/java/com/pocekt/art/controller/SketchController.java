@@ -25,13 +25,17 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
+import javax.imageio.stream.ImageOutputStream;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 
 @RestController
@@ -41,11 +45,13 @@ class SketchController {
     private final Response response;
     private final S3Service s3Service;
     @PostMapping("")
-    public ResponseEntity<?> sketch(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> sketch(@RequestParam("file") MultipartFile file) throws IOException {
         File outputImageFile = null;
         String test="";
-        try {
-            // Load the input image
+
+
+
+            try {
 
             // Convert MultipartFile to BufferedImage
             BufferedImage inputImage = ImageIO.read(new ByteArrayInputStream(file.getBytes()));
@@ -100,13 +106,12 @@ class SketchController {
 
             // S3 업로드
             outputImageFile = new File("/home/ubuntu/23_HI053/sketch/"+file.getOriginalFilename());
-            test= s3Service.Sketchupload(outputImageFile);
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                ImageIO.write(edgeImage, "jpg", byteArrayOutputStream);
+                byte[] imageBytes = byteArrayOutputStream.toByteArray();
 
-
-
-            System.out.println(outputImageFile.getName());
-            System.out.println(outputImageFile.getPath());
-            ImageIO.write(edgeImage, "jpg", outputImageFile);
+                String s3DestinationPath = "sketch/"+outputImageFile.getName(); // 원하는 S3 저장 경로와 파일 이름 지정
+                test = s3Service.upload(imageBytes, s3DestinationPath);
             System.out.println("Edge detection completed and saved as edge_image.jpg");
            
         } catch (Exception e) {
