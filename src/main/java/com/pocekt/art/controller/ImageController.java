@@ -51,7 +51,9 @@ public class ImageController {
     @PostMapping("")
     public ResponseEntity<TransformedImageDTO> goghmodel(@RequestParam String modelname, @RequestPart MultipartFile file) {
         String modelPath="";
+        String imagePath = "";
         if (modelname.equals("gogh")){
+
             modelPath = "/home/ubuntu/23_HI053/models/gogh_08.pt";
 
         }
@@ -63,13 +65,11 @@ public class ImageController {
         }
         if (modelname.equals("east")){
             modelPath = "/home/ubuntu/23_HI053/models/east_08_23.pt";
-//            modelPath="/Users/eom-yelim/23_HI053/models/east_08_23.pt";
+
         }
         if (modelname.equals("cezanne")){
             modelPath = "/home/ubuntu/23_HI053/models/cezanne_08_23.pt";
         }
-
-        String imagePath = "";
 
 
         if (!file.isEmpty()) {
@@ -79,7 +79,6 @@ public class ImageController {
                 String convertedImageFileName = file.getOriginalFilename(); // Use the original filename for the converted image
 
                 String convertedImagePath = Paths.get(uploadDirectory, convertedImageFileName).toString();
-//                String uploadDirectory ="/Users/eom-yelim/23_HI053/models/";
                 String fileName = file.getOriginalFilename();
                 Path filePath = Path.of(uploadDirectory, fileName);
 
@@ -131,12 +130,8 @@ public class ImageController {
                 BufferedImage t_image = transposeImage(image);
 
                 BufferedImage resizedImage = resizeImage(t_image, targetWidth, targetHeight);
-
-
                 //모델 예측
                 float[] result = predictor.predict(resizedImage);
-
-
                 //normalize 역과정
                 for (int i = 0; i < result.length; i++) {
                     result[i] *= 0.5;
@@ -147,8 +142,6 @@ public class ImageController {
                 //형 변환
                 String uploadDirectory2= "/home/ubuntu/23_HI053/models/";
                 BufferedImage output = getImageFromFloatArray(result, targetWidth, targetHeight);
-
-
 
                 String outputPath = Paths.get(uploadDirectory2, file.getOriginalFilename()).toString();
                 byte[] imageBytes = serializeImage(output);
@@ -269,12 +262,12 @@ public class ImageController {
         int cropX = (width - size) / 2;
         int cropY = (height - size) / 2;
 
-        BufferedImage croppedImage = new BufferedImage(size, size, image.getType());
+        BufferedImage croppedImage = new BufferedImage(size, size, image.getType()==0?5:image.getType());
         Graphics2D g = croppedImage.createGraphics();
         g.drawImage(image, 0, 0, size, size, cropX, cropY, cropX + size, cropY + size, null);
         g.dispose();
 
-        BufferedImage transposedImage = new BufferedImage(size, size, image.getType());
+        BufferedImage transposedImage = new BufferedImage(size, size, image.getType()==0?5:image.getType());
         Graphics2D g2 = transposedImage.createGraphics();
         g2.drawImage(croppedImage, 0, 0, null);
         g2.dispose();
