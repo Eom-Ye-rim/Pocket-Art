@@ -63,8 +63,12 @@ public class ImageController {
         if (modelname.equals("edgar")){
             modelPath = "/home/ubuntu/23_HI053/models/edgar_09_02.pt";
         }
-        if (modelname.equals("east")){
+        if (modelname.equals("east1")){
             modelPath = "/home/ubuntu/23_HI053/models/east_08_23.pt";
+
+        }
+        if (modelname.equals("east2")){
+            modelPath = "/home/ubuntu/23_HI053/models/ink_and_wash_09_29.pt";
 
         }
         if (modelname.equals("cezanne")){
