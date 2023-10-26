@@ -234,7 +234,7 @@ public class ContestService {
 
     //삭제
     @Transactional
-    public ResponseEntity deleteStudyById(Users users, Long contestId) {
+    public ResponseEntity deleteContestById(Users users, Long contestId) {
         try {
             Contest contest = contestRepository.findById(contestId).orElseThrow(() -> new IllegalArgumentException(String.format("stydy is not Found!")));
             List<Photo> photo = photoRepository.findByContestId(contestId);

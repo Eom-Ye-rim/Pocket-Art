@@ -53,9 +53,7 @@ public class ImageController {
         String modelPath="";
         String imagePath = "";
         if (modelname.equals("gogh")){
-
             modelPath = "/home/ubuntu/23_HI053/models/gogh_08.pt";
-
         }
         if (modelname.equals("monet")){
             modelPath = "/home/ubuntu/23_HI053/models/monet_08_23.pt";
@@ -74,7 +72,6 @@ public class ImageController {
         if (modelname.equals("cezanne")){
             modelPath = "/home/ubuntu/23_HI053/models/cezanne_08_23.pt";
         }
-
 
         if (!file.isEmpty()) {
             try {

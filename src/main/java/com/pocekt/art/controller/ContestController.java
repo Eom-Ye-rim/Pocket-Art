@@ -40,7 +40,6 @@ public class ContestController {
     public ResponseEntity getCommunityList(
             @RequestParam(required = false) BoardType boardType, @RequestBody SearchType searchCondition, Pageable pageable) {
         PageImpl<ContestPageResponse> responseDTO;
-
         System.out.println(boardType);
         //검색조건중 모든 내용을 입력하지 않고 요청을 보냈을 때 일반 목록 페이지 출력
         if (boardType==null && searchCondition.getContent().isEmpty() && searchCondition.getWriter().isEmpty() && searchCondition.getTitle().isEmpty()) {
@@ -50,7 +49,6 @@ public class ContestController {
                 boardType = BoardType.ALL;
             }
             responseDTO = contestService.getPageListWithSearch(boardType,searchCondition, pageable);
-
         }
         return ResponseEntity.ok()
                 .body(responseDTO);
@@ -100,7 +98,7 @@ public class ContestController {
     @PreAuthorize("hasAnyRole('USER')")
     @DeleteMapping("/{contestId}/delete")
     public ResponseEntity deleteStudyById(@ApiIgnore @AuthUser Users users,  @PathVariable Long contestId) {
-        return contestService.deleteStudyById(users, contestId);
+        return contestService.deleteContestById(users, contestId);
     }
 
 }

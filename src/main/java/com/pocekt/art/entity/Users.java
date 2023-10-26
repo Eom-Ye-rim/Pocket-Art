@@ -91,6 +91,6 @@ public class Users extends BaseTime implements UserDetails {
 
     @PrePersist
     public void prePersist(){
-        this.ProfileImg = this.ProfileImg == null ? "https://pocket-art-app.s3.ap-northeast-2.amazonaws.com/Group+7200.png" : this.ProfileImg;
+        this.ProfileImg = this.ProfileImg == null ? "https://sunny-pj.s3.ap-southeast-2.amazonaws.com/Group+7194.png" : this.ProfileImg;
     }
 }

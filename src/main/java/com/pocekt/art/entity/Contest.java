@@ -61,8 +61,8 @@ public class Contest extends BaseTime {
     private Users users;
 
     @OneToMany(mappedBy = "contest")
-    private List<Comment> commentList=new ArrayList<>();
-
+    @JsonIgnore
+    private List<Comment> commentList = new ArrayList<>();
     @OneToMany(mappedBy = "contest")
     private List<HashTag> tagList=new ArrayList<>();
 
