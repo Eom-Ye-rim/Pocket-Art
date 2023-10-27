@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,14 @@ public class MyPageService {
     private final PasswordEncoder passwordEncoder;
 
     private final LikeRepository likeRepository;
+    private final S3Service s3Service;
     private final Response response;
+
+    @Transactional
+    public ResponseEntity<?> getInfo(Users user) {
+        Users users = usersRepository.findById(user.getId()).orElseThrow(() -> new IllegalArgumentException(String.format("user not Found!")));
+        return response.success(users, "회원 정보를 성공적으로 불러왔습니다.", HttpStatus.CREATED);
+    }
     @Transactional
     public ResponseEntity<?> updateInfo(Users user, UserRequestDto.Info info) {
         try {
@@ -50,6 +58,10 @@ public class MyPageService {
                 users.setName(info.getName());
             }
 
+//            if(!file.isEmpty()){
+//               String newImg= s3Service.upload(file);
+//                users.setProfileImg(newImg);
+//            }
             return response.success(users, "회원 정보를 성공적으로 수정하였습니다.", HttpStatus.CREATED);
         }
         catch (Exception e) {

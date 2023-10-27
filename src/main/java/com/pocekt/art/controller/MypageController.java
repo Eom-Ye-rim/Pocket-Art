@@ -41,6 +41,14 @@ public class MypageController {
 
     @PreAuthorize("hasAnyRole('USER')")
     @GetMapping(value = "")
+    public ResponseEntity getInfo(@ApiIgnore @AuthUser Users users) throws IOException {
+
+        return mypageService.getInfo(users);
+        //return new ResponseEntity(new ApiRes("스터디 등록 성공", HttpStatus.CREATED), HttpStatus.CREATED);
+    }
+
+    @PreAuthorize("hasAnyRole('USER')")
+    @GetMapping(value = "/board")
     public ResponseEntity getUsersPost(@ApiIgnore @AuthUser Users users) throws IOException {
 
         return mypageService.getContestByUserId(users);
