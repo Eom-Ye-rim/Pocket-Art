@@ -28,6 +28,8 @@ public class Comment extends BaseTime{
 
     private String author;
 
+    private String img;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="users_id")
     @JsonIgnore

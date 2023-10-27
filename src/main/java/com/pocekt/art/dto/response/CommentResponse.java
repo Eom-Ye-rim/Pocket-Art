@@ -15,19 +15,21 @@ public class CommentResponse {
     private String content;
 
     private String author;
+    private String userImg;
     private List<CommentResponse> children = new ArrayList<>();
 
-    public CommentResponse(Long id, String content, String author) {
+    public CommentResponse(Long id, String content, String author,String img) {
         this.id = id;
         this.author = author;
         this.content = content;
+        this.userImg=img;
 
     }
 
     public static CommentResponse convertCommentToDto(Comment comment) {
         return comment.getIsDeleted() ?
-                new CommentResponse(comment.getId(), "삭제된 댓글입니다.", null) :
-                new CommentResponse(comment.getId(), comment.getContent(),comment.getAuthor());
+                new CommentResponse(comment.getId(), "삭제된 댓글입니다.", null,null) :
+                new CommentResponse(comment.getId(), comment.getContent(),comment.getAuthor(),comment.getImg());
     }
 
 }

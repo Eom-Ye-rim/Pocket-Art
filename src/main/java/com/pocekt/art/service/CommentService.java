@@ -50,12 +50,13 @@ public class CommentService {
         comment.setAuthor(users.getName());
         comment.setContest(contest);
         comment.setContent(commentRequestDTO.getContent());
+        comment.setImg(users.getProfileImg());
         comment.setUsers(users);
 
         commentRepository.save(comment);
         users.getCommentList().add(comment);
 
-        return response.success(new CommentResponse(comment.getId(),comment.getAuthor(),comment.getContent()), "댓글을 등록 하였습니다..", HttpStatus.CREATED);
+        return response.success(new CommentResponse(comment.getId(),comment.getAuthor(),comment.getContent(), comment.getImg()), "댓글을 등록 하였습니다..", HttpStatus.CREATED);
 
     }
 
