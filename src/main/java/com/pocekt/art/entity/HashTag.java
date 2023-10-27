@@ -20,7 +20,7 @@ public class HashTag {
     @Column
     private String tagname;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @JsonBackReference
     @JoinColumn(name="contest_id")
