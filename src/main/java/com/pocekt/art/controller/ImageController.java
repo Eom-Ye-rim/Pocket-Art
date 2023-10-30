@@ -56,13 +56,14 @@ public class ImageController {
             modelPath = "/home/ubuntu/23_HI053/models/gogh_08.pt";
         }
         if (modelname.equals("monet")){
-            modelPath = "/home/ubuntu/23_HI053/models/monet_08_23.pt";
+            modelPath = "/home/ubuntu/23_HI053/models/monet.pt";
+            System.out.println(modelPath);
         }
         if (modelname.equals("edgar")){
             modelPath = "/home/ubuntu/23_HI053/models/edgar_09_02.pt";
         }
         if (modelname.equals("east1")){
-            modelPath = "/home/ubuntu/23_HI053/models/east_08_23.pt";
+            modelPath = "/home/ubuntu/23_HI053/models/east.pt";
 
         }
         if (modelname.equals("east2")){
