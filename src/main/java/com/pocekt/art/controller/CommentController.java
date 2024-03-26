@@ -3,7 +3,7 @@ package com.pocekt.art.controller;
 
 import com.pocekt.art.auth.AuthUser;
 import com.pocekt.art.dto.request.CommentRequest;
-import com.pocekt.art.entity.Users;
+import com.pocekt.art.user.domain.Users;
 import com.pocekt.art.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,6 +1,6 @@
 package com.pocekt.art.dto.response;
 
-import com.pocekt.art.entity.Contest;
+import com.pocekt.art.board.domain.Contest;
 
 import java.util.List;
 import java.util.stream.Collectors;

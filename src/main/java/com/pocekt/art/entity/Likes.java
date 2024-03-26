@@ -1,6 +1,8 @@
 package com.pocekt.art.entity;
 
 
+import com.pocekt.art.board.domain.Contest;
+import com.pocekt.art.user.domain.Users;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

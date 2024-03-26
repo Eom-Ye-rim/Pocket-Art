@@ -2,17 +2,13 @@ package com.pocekt.art.controller;
 
 
 import com.pocekt.art.auth.AuthUser;
-import com.pocekt.art.dto.request.UserRequestDto;
-import com.pocekt.art.dto.response.ContestPageResponse;
+import com.pocekt.art.user.dto.request.UserRequestDto;
 import com.pocekt.art.dto.response.Response;
-import com.pocekt.art.entity.BoardType;
-import com.pocekt.art.entity.SearchType;
-import com.pocekt.art.entity.Users;
+import com.pocekt.art.board.domain.BoardType;
+import com.pocekt.art.user.domain.Users;
 import com.pocekt.art.service.MyPageService;
-import com.pocekt.art.service.UsersService;
+import com.pocekt.art.user.service.UsersService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
