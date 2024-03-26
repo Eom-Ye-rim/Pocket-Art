@@ -1,6 +1,9 @@
 ## 🎨 Pocket Art
 ---
-![image](https://github.com/Eom-Ye-rim/Pocket-Art/assets/78583768/b226825a-c475-4317-9aed-ecc0bc6028b9)
+
+
+https://github.com/Eom-Ye-rim/Pocket-Art/assets/78583768/58985859-7b36-48e5-af87-3d07605a8cdf
+
 
 
 ## 서비스 소개 [<소개 영상>](https://youtu.be/bSPopLSbDvs)
