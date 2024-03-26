@@ -34,7 +34,9 @@
     - chatGPT를 활용한 챗봇
 ---
 ## ✅ 서비스 흐름도
-![image](https://github.com/Eom-Ye-rim/Pocket-Art/assets/78583768/6bf19a81-9943-4480-b973-929657ff45ab)
+
+![image](https://github.com/Eom-Ye-rim/Pocket-Art/assets/78583768/35b8e4e6-ecec-4283-96f0-d4fa91b9ed9f)
+
 
 ----
 ## ✅ 메뉴 구성도
