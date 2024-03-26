@@ -104,7 +104,6 @@ dependencies {
 	implementation group: 'org.bytedeco', name: 'javacv', version: '1.5.6' // 현재 버전 확인
 
 	implementation group: 'com.google.apis', name: 'google-api-services-dialogflow', version: 'v2-rev124-1.25.0'
-	// 다른 의존성들을 추가할 수 있습니다.
 
 
 

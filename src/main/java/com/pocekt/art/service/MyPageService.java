@@ -1,27 +1,23 @@
 package com.pocekt.art.service;
 
 
-import com.amazonaws.services.kms.model.NotFoundException;
-import com.pocekt.art.dto.request.UserRequestDto;
+import com.pocekt.art.board.domain.BoardType;
+import com.pocekt.art.board.domain.Contest;
+import com.pocekt.art.user.dto.request.UserRequestDto;
 import com.pocekt.art.dto.response.ContestPageResponse;
-import com.pocekt.art.dto.response.ContestResponse;
-import com.pocekt.art.dto.response.MypageContestResponse;
 import com.pocekt.art.dto.response.Response;
 import com.pocekt.art.entity.*;
 import com.pocekt.art.repository.LikeRepository;
-import com.pocekt.art.repository.UsersRepository;
+import com.pocekt.art.user.domain.Users;
+import com.pocekt.art.user.repository.UsersRepository;
 import com.pocekt.art.repository.comment.CommentRepository;
-import com.pocekt.art.repository.contest.ContestRepository;
+import com.pocekt.art.board.repository.ContestRepository;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.ast.Not;
-import org.opencv.aruco.Board;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;

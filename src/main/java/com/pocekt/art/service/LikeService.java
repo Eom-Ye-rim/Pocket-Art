@@ -4,12 +4,12 @@ package com.pocekt.art.service;
 
 import com.amazonaws.services.kms.model.NotFoundException;
 import com.pocekt.art.dto.response.Response;
-import com.pocekt.art.entity.Contest;
+import com.pocekt.art.board.domain.Contest;
 import com.pocekt.art.entity.Likes;
-import com.pocekt.art.entity.Users;
+import com.pocekt.art.user.domain.Users;
 import com.pocekt.art.repository.LikeRepository;
-import com.pocekt.art.repository.UsersRepository;
-import com.pocekt.art.repository.contest.ContestRepository;
+import com.pocekt.art.user.repository.UsersRepository;
+import com.pocekt.art.board.repository.ContestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

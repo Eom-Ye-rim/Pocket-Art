@@ -3,9 +3,9 @@ package com.pocekt.art.config;
 
 
 
-import com.pocekt.art.jwt.JwtAuthenticationFilter;
-import com.pocekt.art.jwt.JwtSecurityConfig;
-import com.pocekt.art.jwt.JwtTokenProvider;
+import com.pocekt.art.user.jwt.JwtAuthenticationFilter;
+import com.pocekt.art.user.jwt.JwtSecurityConfig;
+import com.pocekt.art.user.jwt.JwtTokenProvider;
 import com.pocekt.art.security.handler.CustomAccessDeniedHandler;
 import com.pocekt.art.security.handler.CustomAuthenticationEntryPoint;
 import com.pocekt.art.service.CustomUserDetailsService;

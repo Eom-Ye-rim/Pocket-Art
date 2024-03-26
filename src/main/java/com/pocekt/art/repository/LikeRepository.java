@@ -1,8 +1,8 @@
 package com.pocekt.art.repository;
 
-import com.pocekt.art.entity.Contest;
+import com.pocekt.art.board.domain.Contest;
 import com.pocekt.art.entity.Likes;
-import com.pocekt.art.entity.Users;
+import com.pocekt.art.user.domain.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

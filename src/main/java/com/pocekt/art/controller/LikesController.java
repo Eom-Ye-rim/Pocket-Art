@@ -2,7 +2,7 @@ package com.pocekt.art.controller;
 
 
 import com.pocekt.art.auth.AuthUser;
-import com.pocekt.art.entity.Users;
+import com.pocekt.art.user.domain.Users;
 import com.pocekt.art.service.LikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

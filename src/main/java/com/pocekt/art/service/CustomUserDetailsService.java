@@ -2,8 +2,8 @@ package com.pocekt.art.service;
 
 
 
-import com.pocekt.art.entity.Users;
-import com.pocekt.art.repository.UsersRepository;
+import com.pocekt.art.user.domain.Users;
+import com.pocekt.art.user.repository.UsersRepository;
 import com.pocekt.art.security.CustomUserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

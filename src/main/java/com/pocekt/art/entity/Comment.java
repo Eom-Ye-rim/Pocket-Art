@@ -1,5 +1,7 @@
 package com.pocekt.art.entity;
 
+import com.pocekt.art.board.domain.Contest;
+import com.pocekt.art.user.domain.Users;
 import lombok.*;
 import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.ColumnDefault;
