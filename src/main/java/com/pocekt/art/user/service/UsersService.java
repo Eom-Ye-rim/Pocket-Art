@@ -1,6 +1,11 @@
 package com.pocekt.art.user.service;
 
 
+import static com.pocekt.art.user.exception.UserErrorCode.EMAIL_ALREADY_REGISTERED;
+import static com.pocekt.art.user.exception.UserErrorCode.PASSWORD_UNMATCH;
+import static com.pocekt.art.user.exception.UserErrorCode.USER_NOT_FOUND;
+
+import com.pocekt.art.common.CustomException;
 import com.pocekt.art.user.dto.request.UserRequestDto;
 import com.pocekt.art.dto.response.Response;
 import com.pocekt.art.user.dto.response.UserResponseDto;
@@ -45,8 +50,8 @@ public class UsersService {
 
     public ResponseEntity<?> signUp(UserRequestDto.SignUp signUp) {
         if (usersRepository.existsByEmail(signUp.getEmail())) {
-            return response.fail("이미 회원가입된 이메일입니다.", HttpStatus.BAD_REQUEST);
-        }
+            throw new CustomException(EMAIL_ALREADY_REGISTERED);
+            }
 
         Users users = Users.builder()
                 .email(signUp.getEmail())
@@ -64,33 +69,26 @@ public class UsersService {
         Users users = usersRepository.findByEmail(login.getEmail()).orElseThrow(() -> new NoSuchElementException("유저가 없습니다"));
 
         if (usersRepository.findByEmail(login.getEmail()).orElse(null) == null) {
-            return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
+            throw new CustomException(USER_NOT_FOUND);
         }
-
-
         if (!passwordEncoder.matches(login.getPassword(), users.getPassword())) {
-            return response.fail("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+            throw new CustomException(PASSWORD_UNMATCH);
         }
 
 
         // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
         // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
         UsernamePasswordAuthenticationToken authenticationToken = login.toAuthentication();
-        System.out.println("authenticationToken : "+authenticationToken);
 
         // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
         // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        System.out.println("authentication : "+authentication);
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
         UserResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
-        System.out.println("tokenInfo : "+authentication);
-        System.out.println("tokenInfo : "+authentication.getName());
 
         // 4. RefreshToken Redis 저장 (expirationTime 설정을 통해 자동 삭제 처리)
         redisTemplate.opsForValue()
                 .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
-
         return response.success(tokenInfo, "로그인에 성공했습니다.", HttpStatus.OK);
     }
 
@@ -179,29 +177,26 @@ public class UsersService {
     }
 
     public String tempPassword(String confirm, String email) {
-        System.out.print("시작");
         Users users = usersRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
-        users.setPassword(confirm);
+                .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+        users.updatePassword(confirm);
         usersRepository.save(users);
         System.out.print("비밀번호"+ users.getPassword());
         return users.getPassword();
     }
 
     public ResponseEntity<?> updatePassword(UserRequestDto.passwordConfirm password) {
-//        User user = usersRepository.findByEmail(email)
-//                .orElseThrow(() -> new IllegalStateException("이메일 찾지 못함"));
-        Users users = usersRepository.findByEmail(password.getEmail()).orElseThrow(() -> new NoSuchElementException("유저가 없습니다"));
+
+        Users users = usersRepository.findByEmail(password.getEmail()).orElseThrow(() -> new CustomException(USER_NOT_FOUND));
         String TruePassword= users.getPassword();
         boolean check=passwordEncoder.matches(password.getCheckpassword(),TruePassword);
         if(check){
-            users.setPassword(password.getChangepassword());
+            users.updatePassword(password.getChangepassword());
             usersRepository.save(users);
             return response.success();
         }
         else{
-            return response.fail("현재 비밀번호가 올바르지 않습니다.", HttpStatus.BAD_REQUEST);
-
+            throw new CustomException(PASSWORD_UNMATCH);
         }
 
     }

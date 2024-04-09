@@ -20,15 +20,14 @@ import java.util.stream.Collectors;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
 @Getter
 @Entity
 public class Users extends BaseTime implements UserDetails {
 
     @Id
     @GeneratedValue
-    @Column(name = "users_id", columnDefinition = "BINARY(16)")
-    private UUID id;
+    @Column(name = "users_id")
+    private Long id;
 
     @Column
     private String email;
@@ -66,6 +65,16 @@ public class Users extends BaseTime implements UserDetails {
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
+    public void updatePassword(String password){
+        this.password=password;
+    }
+    public void updateEmail(String email){
+        this.email=email;
+    }
+    public void updateName(String name){
+        this.name=name;
+    }
+
 
     @Override
     public String getUsername() {

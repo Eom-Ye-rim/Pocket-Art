@@ -21,6 +21,4 @@ public interface ContestCustomRepository {
 
     PageImpl<ContestPageResponse> getQuestionListPageWithSearch(BoardType boardType, SearchType searchType, Pageable pageable);
 
-
-
 }

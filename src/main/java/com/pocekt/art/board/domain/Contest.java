@@ -88,11 +88,6 @@ public class Contest extends BaseTime {
         hashTag.setContest(this);
     }
 
-    public void addPhoto(Photo photo){
-        photoList.add(photo);
-        photo.setContest(this);
-    }
-
     public static boolean checkContestLoginUser(Users users, Contest contest) {
         return Objects.equals(contest.getUsers().getName(), users.getName());
     }

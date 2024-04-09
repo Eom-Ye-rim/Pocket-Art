@@ -6,9 +6,12 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.pocekt.art.entity.Comment;
 import com.pocekt.art.board.domain.Contest;
 import com.pocekt.art.entity.HashTag;
+import com.pocekt.art.entity.Photo;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @JsonNaming(value = PropertyNamingStrategy.SnakeCaseStrategy.class)
@@ -49,8 +52,8 @@ public record ContestResponse (
             contest.getContents(),
             contest.getViewCount(),
             contest.getPhotoList().stream()
-                .map(photo -> photo.getFileUrl())
-                .filter(file -> file != null)
+                .map(Photo::getFileUrl)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList()),
             tagList,
             contest.getCommentList(),

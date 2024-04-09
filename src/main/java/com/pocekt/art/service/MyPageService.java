@@ -45,13 +45,13 @@ public class MyPageService {
         try {
             Users users = usersRepository.findById(user.getId()).orElseThrow(() -> new IllegalArgumentException(String.format("user not Found!")));
             if (info.getEmail()!=null){
-                users.setEmail(info.getEmail());
+                users.updateEmail(info.getEmail());
             }
             if(info.getPassword()!=null){
-                users.setPassword(passwordEncoder.encode(info.getPassword()));
+                users.updatePassword(passwordEncoder.encode(info.getPassword()));
             }
             if(info.getName()!=null){
-                users.setName(info.getName());
+                users.updateName(info.getName());
             }
 
 //            if(!file.isEmpty()){

@@ -63,7 +63,6 @@ public class ContestService {
         }
     }
 
-
     //검색 기능 (제목, 제목 + 내용, 작성자 ) , 정렬 기능 (최신순, 좋아요 많은 순) , 카테고리 클릭
     public PageImpl<ContestPageResponse> getContestList(Pageable pageable) {
         PageImpl<ContestPageResponse> result = contestRepository.getContestList(pageable);
@@ -150,7 +149,7 @@ public class ContestService {
                     .users(users)
                     .build();
 
-            Users saveUsers = usersRepository.findById(users.getId()).get();
+            Users saveUsers = usersRepository.getById(users.getId());
             saveUsers.getContestList().add(contest);
             if (contestRequest.hashtag()!=null) {
                 List<String> tagList = new ArrayList<>();

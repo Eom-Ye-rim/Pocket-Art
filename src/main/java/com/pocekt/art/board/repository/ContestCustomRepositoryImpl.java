@@ -148,7 +148,4 @@ public class ContestCustomRepositoryImpl extends QuerydslRepositorySupport imple
         }
         return contest.author.contains(boardWriter);
     }
-
-
-
 }

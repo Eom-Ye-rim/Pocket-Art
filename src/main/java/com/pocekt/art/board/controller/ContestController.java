@@ -29,17 +29,15 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class ContestController {
-
     private final ContestService contestService;
-    private final S3Service s3Service;
-
-//    @PreAuthorize("hasAnyRole('USER')")
     @PostMapping("/all")
     public ResponseEntity getCommunityList(
-            @RequestParam(required = false) BoardType boardType, @RequestBody SearchType searchCondition, Pageable pageable) {
+            @RequestParam(required = false) BoardType boardType, @RequestBody SearchType searchCondition,
+        Pageable pageable) {
         PageImpl<ContestPageResponse> responseDTO;
         //검색조건중 모든 내용을 입력하지 않고 요청을 보냈을 때 일반 목록 페이지 출력
-        if (boardType==null && searchCondition.getContent().isEmpty() && searchCondition.getWriter().isEmpty() && searchCondition.getTitle().isEmpty()) {
+        if (boardType==null && searchCondition.getContent().isEmpty() &&
+            searchCondition.getWriter().isEmpty() && searchCondition.getTitle().isEmpty()) {
             responseDTO = contestService.getContestList(pageable);
         } else {
             if (boardType == null) {
@@ -54,7 +52,7 @@ public class ContestController {
 
     @GetMapping("/best")
     public ResponseEntity getBestImageList(){
-        return contestService.getTop5ContestsByLikes(); //조회수 뭔가 이상한 것 같기도 하고 ..?
+        return contestService.getTop5ContestsByLikes();
     }
 
     @PreAuthorize("hasAnyRole('USER')")
@@ -67,7 +65,7 @@ public class ContestController {
     @PreAuthorize("hasAnyRole('USER')")
     @PostMapping(value = "")
     public ResponseEntity writeContest(@ApiIgnore @AuthUser Users users,
-        @Valid @RequestPart(value = "communityRequest") ContestRequest contestRequest,
+        @Valid @RequestPart(value = "contestRequest") ContestRequest contestRequest,
         @RequestPart(value = "files", required = false) List<MultipartFile> files) throws IOException {
 
         return contestService.createContest(users,contestRequest,files);
@@ -75,12 +73,12 @@ public class ContestController {
 
     @PreAuthorize("hasAnyRole('USER')")
     @PutMapping(value = "/{contestId}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE )
-    public ResponseEntity updateContest(@ApiIgnore @AuthUser Users users, @PathVariable Long contestId,
-                                      @RequestPart(value = "contestRequest") ContestRequest contestRequest,@RequestPart(required=false ) List<MultipartFile> files) throws IOException {
-
+    public ResponseEntity updateContest(@ApiIgnore @AuthUser Users users,
+        @PathVariable Long contestId,
+        @RequestPart(value = "contestRequest") ContestRequest contestRequest,
+        @RequestPart(required=false ) List<MultipartFile> files) throws IOException {
         return contestService.updateContest(users, contestId,contestRequest,files);
     }
-
 
     @PreAuthorize("hasAnyRole('USER')")
     @DeleteMapping("/{contestId}/delete")
